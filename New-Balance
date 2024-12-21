@@ -6,7 +6,7 @@ local UIS = game:GetService("UserInputService")
 local TPPilka = Enum.KeyCode.E
 local PilkaHitBox = Enum.KeyCode.F4
 
-local TP_Studs = 14
+local TP_Studs = 10.5
 
 local OldHitBox
 
