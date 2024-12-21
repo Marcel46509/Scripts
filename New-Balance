@@ -6,7 +6,7 @@ local UIS = game:GetService("UserInputService")
 local TPPilka = Enum.KeyCode.E
 local PilkaHitBox = Enum.KeyCode.F4
 
-local TP_Studs = 8.5
+local TP_Studs = 8
 
 local OldHitBox
 
@@ -32,8 +32,8 @@ UIS.InputBegan:Connect(function(inp, GPE)
 	if (Pilka) then
 		local Studs = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - Pilka.Position).Magnitude
 		--//
-		if (TP_Studs >= Studs) then
-			if (inp.KeyCode == TPPilka) then
+		if (inp.KeyCode == TPPilka) then
+			if (TP_Studs >= Studs) then
 				Pilka.Position = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
 			end
 		end
