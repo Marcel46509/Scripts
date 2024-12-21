@@ -6,32 +6,42 @@ local UIS = game:GetService("UserInputService")
 local TPPilka = Enum.KeyCode.E
 local PilkaHitBox = Enum.KeyCode.F4
 
+local TP_Studs = 14
+
 local OldHitBox
 
 local function GetBall()
-    for _,v : Instance in next, game:GetService("Workspace").EngineWorkspace.Balls:GetChildren() do
-        if (v:IsA("BasePart")) then
-            if (not OldHitBox) then
-                OldHitBox = v.Size
-            end
-            --//
-            return v
-        end
-    end
-    --//
-    return false
+	for _,v : Instance in next, game:GetService("Workspace").EngineWorkspace.Balls:GetChildren() do
+		if (v:IsA("BasePart")) then
+			if (not OldHitBox) then
+				OldHitBox = v.Size
+			end
+			--//
+			return v
+		end
+	end
+	--//
+	return false
 end
 
 UIS.InputBegan:Connect(function(inp, GPE)
-    if (GPE) then return end
-    --//
-    if (inp.KeyCode == TPPilka) then
-        GetBall().Position = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
-    elseif (inp.KeyCode == PilkaHitBox) then
-        if (GetBall().Size ~= OldHitBox) then
-            GetBall().Size = OldHitBox
-        else
-            GetBall().Size = (OldHitBox * 2)
-        end
-    end
+	if (GPE) then return end
+	--//
+	local Pilka : Instance = GetBall()
+	--//
+	if (Pilka) then
+		local Studs = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - Pilka.Position).Magnitude
+		--//
+		if (TP_Studs >= Studs) then
+			if (inp.KeyCode == TPPilka) then
+				Pilka.Position = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+			elseif (inp.KeyCode == PilkaHitBox) then
+				if (Pilka.Size ~= OldHitBox) then
+					Pilka.Size = OldHitBox
+				else
+					Pilka.Size = (OldHitBox * 2)
+				end
+			end
+		end
+	end
 end)
