@@ -161,53 +161,64 @@ local function YXGDBCV_fake_script() -- Frame.LocalScript
 			v.TextColor3 = FontColor
 		end
 	end
-
-	A.InputBegan:Connect(function(Input,UserInput)
-		if Input.KeyCode == Enum.KeyCode.W then
-			Keye.W.BackgroundColor3 = ColorOnClick			
-		end
-		if Input.KeyCode == Enum.KeyCode.S then
-			Keye.S.BackgroundColor3 = ColorOnClick
-		end
-		if Input.KeyCode == Enum.KeyCode.A then
-			Keye.A.BackgroundColor3 = ColorOnClick
-		end
-		if Input.KeyCode == Enum.KeyCode.D then
-			Keye.D.BackgroundColor3 = ColorOnClick
-		end
-		if Input.KeyCode == Enum.KeyCode.Space then
-			Keye.Space.BackgroundColor3 = ColorOnClick		
-		end
-		if Input.UserInputType == Enum.UserInputType.MouseButton1 then
-			Keye.LMB.BackgroundColor3 = ColorOnClick			
-		end
-		if Input.UserInputType == Enum.UserInputType.MouseButton2 then
-			Keye.RMB.BackgroundColor3 = ColorOnClick			
-		end
+	
+	local Call1 : RBXScriptConnection
+	local Call2 : RBXScriptConnection
+	
+	Call1 = A.InputBegan:Connect(function(Input,UserInput)		
+		xpcall(function()
+			if Input.KeyCode == Enum.KeyCode.W then
+				Keye.W.BackgroundColor3 = ColorOnClick			
+			end
+			if Input.KeyCode == Enum.KeyCode.S then
+				Keye.S.BackgroundColor3 = ColorOnClick
+			end
+			if Input.KeyCode == Enum.KeyCode.A then
+				Keye.A.BackgroundColor3 = ColorOnClick
+			end
+			if Input.KeyCode == Enum.KeyCode.D then
+				Keye.D.BackgroundColor3 = ColorOnClick
+			end
+			if Input.KeyCode == Enum.KeyCode.Space then
+				Keye.Space.BackgroundColor3 = ColorOnClick		
+			end
+			if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+				Keye.LMB.BackgroundColor3 = ColorOnClick			
+			end
+			if Input.UserInputType == Enum.UserInputType.MouseButton2 then
+				Keye.RMB.BackgroundColor3 = ColorOnClick			
+			end
+		end, function(_ : string)
+			Call1:Disconnect()
+		end)
 	end)
 
-	A.InputEnded:Connect(function(Input,UserInput)
-		if Input.KeyCode == Enum.KeyCode.W then
-			Keye.W.BackgroundColor3 = ColorOnEnd			
-		end
-		if Input.KeyCode == Enum.KeyCode.S then
-			Keye.S.BackgroundColor3 = ColorOnEnd
-		end
-		if Input.KeyCode == Enum.KeyCode.A then
-			Keye.A.BackgroundColor3 = ColorOnEnd
-		end
-		if Input.KeyCode == Enum.KeyCode.D then
-			Keye.D.BackgroundColor3 = ColorOnEnd
-		end	
-		if Input.KeyCode == Enum.KeyCode.Space then
-			Keye.Space.BackgroundColor3 = ColorOnEnd	
-		end
-		if Input.UserInputType == Enum.UserInputType.MouseButton1 then
-			Keye.LMB.BackgroundColor3 = ColorOnEnd			
-		end
-		if Input.UserInputType == Enum.UserInputType.MouseButton2 then
-			Keye.RMB.BackgroundColor3 = ColorOnEnd			
-		end
+	Call2 = A.InputEnded:Connect(function(Input,UserInput)		
+		xpcall(function()
+			if Input.KeyCode == Enum.KeyCode.W then
+				Keye.W.BackgroundColor3 = ColorOnEnd			
+			end
+			if Input.KeyCode == Enum.KeyCode.S then
+				Keye.S.BackgroundColor3 = ColorOnEnd
+			end
+			if Input.KeyCode == Enum.KeyCode.A then
+				Keye.A.BackgroundColor3 = ColorOnEnd
+			end
+			if Input.KeyCode == Enum.KeyCode.D then
+				Keye.D.BackgroundColor3 = ColorOnEnd
+			end	
+			if Input.KeyCode == Enum.KeyCode.Space then
+				Keye.Space.BackgroundColor3 = ColorOnEnd	
+			end
+			if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+				Keye.LMB.BackgroundColor3 = ColorOnEnd			
+			end
+			if Input.UserInputType == Enum.UserInputType.MouseButton2 then
+				Keye.RMB.BackgroundColor3 = ColorOnEnd			
+			end
+		end, function(_ : string)
+			Call2:Disconnect()
+		end)
 	end)
 end
 
