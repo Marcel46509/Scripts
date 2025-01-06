@@ -1,3 +1,5 @@
+local RunService = game:GetService("RunService")
+
 --// SETTINGS //
 local ColorOnClick = Color3.new(0.976471, 0.631373, 1)
 local ColorOnEnd = Color3.new(0.176471, 0.145098, 0.184314)
@@ -19,11 +21,10 @@ local GUI_NAME = "KeyStrokes"
 
 --// PARENT CHECKS //
 
-_, Success = pcall(function()
-	GUI_PARENT = game.CoreGui
-end)
-if (not Success) then
+if (RunService:IsStudio()) then
 	GUI_PARENT = game.Players.LocalPlayer.PlayerGui
+else
+	GUI_PARENT = game.CoreGui
 end
 
 --// MAIN CHECKS //
@@ -135,7 +136,7 @@ Space.TextWrapped = true
 
 local function YXGDBCV_fake_script() -- Frame.LocalScript 
 	local script = Instance.new('LocalScript', Frame)
-	
+
 	local Keye = script.Parent
 	local A = game:GetService("UserInputService")
 	Keye.W.BackgroundColor3 = ColorOnEnd			
@@ -151,20 +152,20 @@ local function YXGDBCV_fake_script() -- Frame.LocalScript
 			v.BorderSizePixel = BorderSizePixel
 			v.TextTransparency = TextTransparency
 			v.TextStrokeTransparency = TextBorderTransparency
-			
+
 			if (v.Name ~= "Space") then
 				v.TextSize = TextSize
 				v.Font = Font
 			end
-			
+
 			v.BackgroundTransparency = BgTransparency
 			v.TextColor3 = FontColor
 		end
 	end
-	
+
 	local Call1 : RBXScriptConnection
 	local Call2 : RBXScriptConnection
-	
+
 	Call1 = A.InputBegan:Connect(function(Input,UserInput)		
 		xpcall(function()
 			if Input.KeyCode == Enum.KeyCode.W then
