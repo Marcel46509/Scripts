@@ -48,6 +48,7 @@ local Space = Instance.new("TextLabel")
 
 ScreenGui.Name = GUI_NAME
 ScreenGui.Parent = GUI_PARENT
+ScreenGui.DisplayOrder = -2
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 ScreenGui.ResetOnSpawn = false
