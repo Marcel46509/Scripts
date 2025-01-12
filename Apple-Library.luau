@@ -1,4 +1,4 @@
--- vars
+-- vars > not made by me <
 
 local lib = {}
 local sections = {}
