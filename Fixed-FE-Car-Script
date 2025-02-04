@@ -7,7 +7,7 @@ local LocalPlayer = Playr.LocalPlayer
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Marcel46509/Scripts/refs/heads/main/IreXion-UI-Library"))()
 
 local Gui = Library:AddGui({
-	Title = {"FE Car", "Fixed by Marcel"},
+	Title = {"FE Car", "Lozarth, Fixed by Marcel"},
 	ThemeColor = Color3.fromRGB(0,91,150),
 	ToggleKey = Enum.KeyCode.Insert,
 })
@@ -57,24 +57,6 @@ local Category = Tab:AddCategory("Discord")
 local Button = Category:AddButton("Join Discord", function()
     setclipboard("https://discord.gg/dy5MfKxmAM")
     Library:Notify("Invite prompted! If it did not work the invite was copied to your clipboard.")
-    local json = {
-   ["cmd"] = "INVITE_BROWSER",
-   ["args"] = {
-       ["code"] = "dy5MfKxmAM"
-   },
-   ["nonce"] = 'a'
-}
-spawn(function()
-   print(syn.request({
-       Url = 'http://127.0.0.1:6463/rpc?v=1',
-       Method = 'POST',
-       Headers = {
-           ['Content-Type'] = 'application/json',
-           ['Origin'] = 'https://discord.com'
-       },
-       Body = game:GetService('HttpService'):JSONEncode(json),
-   }).Body)
-end)
 end)
 
 local Tab = Gui:AddTab("Close")
@@ -82,30 +64,5 @@ local Tab = Gui:AddTab("Close")
 local Category = Tab:AddCategory("Close")
 
 local Button = Category:AddButton("Close GUI", function()
-	Core["FE Car Fixed by Marcel"]:Destroy()
-end)
-
-Library:Notify("Join Discord server?", function(bool)
-	if bool == true then
-		setclipboard("https://discord.gg/dy5MfKxmAM")
-    Library:Notify("Invite prompted! If it did not work the invite was copied to your clipboard.")
-    local json = {
-   ["cmd"] = "INVITE_BROWSER",
-   ["args"] = {
-       ["code"] = "dy5MfKxmAM"
-   },
-   ["nonce"] = 'a'
-}
-spawn(function()
-   print(syn.request({
-       Url = 'http://127.0.0.1:6463/rpc?v=1',
-       Method = 'POST',
-       Headers = {
-           ['Content-Type'] = 'application/json',
-           ['Origin'] = 'https://discord.com'
-       },
-       Body = game:GetService('HttpService'):JSONEncode(json),
-   }).Body)
-end)
-end
+	Core["FE Car Lozarth, Fixed by Marcel"]:Destroy()
 end)
