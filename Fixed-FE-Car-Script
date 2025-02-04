@@ -7,9 +7,9 @@ local LocalPlayer = Playr.LocalPlayer
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Marcel46509/Scripts/refs/heads/main/IreXion-UI-Library"))()
 
 local Gui = Library:AddGui({
-	Title = {"FE Car", "Made by Lozarth"},
+	Title = {"FE Car", "Fixed by Marcel"},
 	ThemeColor = Color3.fromRGB(0,91,150),
-	ToggleKey = Enum.KeyCode.RightShift,
+	ToggleKey = Enum.KeyCode.Insert,
 })
 
 local Tab = Gui:AddTab("Main")
@@ -50,37 +50,17 @@ local Button = Category:AddButton("Extreme Car Settings Preset", function()
 	Float_Height="-1.03" local a=1 G=game _=wait p=G:GetService("Players").LocalPlayer.Character p:FindFirstChild("Humanoid").HipHeight=Float_Height _(1.5) t=.4 for a=1,a do repeat p:FindFirstChild("Humanoid").HipHeight=Float_Height-n _(t) p:FindFirstChild("Humanoid").HipHeight=Float_Height+n _(t)until p:FindFirstChild("Humanoid").Health==0 end
 end)
 
-if game.PlaceId == 2041312716 then
-local Tab = Gui:AddTab("Ragdoll Engine")
-
-local Category = Tab:AddCategory("Ragdoll Engine Features")
-local Button = Category:AddButton("Push Aura", function()
-    
-Run.RenderStepped:Connect(function()
-        LocalPlayer.Character.Push.PushEvent:FireServer()
-	end)
-end)
-
-local Label = Category:AddLabel("Useful for flinging people when you hit them with your car")
-local Label = Category:AddLabel("Or just flinging people who come close.")
-local Label = Category:AddLabel("Equip Push tool before clicking to work.")
-
-local Button = Category:AddButton("Anti-Ragdoll", function()
-	LocalPlayer.Character:FindFirstChild("Local Ragdoll"):Destroy()
-end)
-end
-
 local Tab = Gui:AddTab("Discord")
 
 local Category = Tab:AddCategory("Discord")
 
 local Button = Category:AddButton("Join Discord", function()
-    setclipboard("https://discord.gg/hsdcAFZY9E")
+    setclipboard("https://discord.gg/dy5MfKxmAM")
     Library:Notify("Invite prompted! If it did not work the invite was copied to your clipboard.")
     local json = {
    ["cmd"] = "INVITE_BROWSER",
    ["args"] = {
-       ["code"] = "hsdcAFZY9E"
+       ["code"] = "dy5MfKxmAM"
    },
    ["nonce"] = 'a'
 }
@@ -102,17 +82,17 @@ local Tab = Gui:AddTab("Close")
 local Category = Tab:AddCategory("Close")
 
 local Button = Category:AddButton("Close GUI", function()
-	Core["FE Car Made by Lozarth"]:Destroy()
+	Core["FE Car Fixed by Marcel"]:Destroy()
 end)
 
 Library:Notify("Join Discord server?", function(bool)
 	if bool == true then
-		setclipboard("https://discord.gg/hsdcAFZY9E")
+		setclipboard("https://discord.gg/dy5MfKxmAM")
     Library:Notify("Invite prompted! If it did not work the invite was copied to your clipboard.")
     local json = {
    ["cmd"] = "INVITE_BROWSER",
    ["args"] = {
-       ["code"] = "hsdcAFZY9E"
+       ["code"] = "dy5MfKxmAM"
    },
    ["nonce"] = 'a'
 }
