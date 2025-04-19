@@ -1,0 +1,156 @@
+local Library = loadstring(game:HttpGet('https://raw.githubusercontent.com/Marcel46509/Scripts/refs/heads/main/Cattoware.luau'))()
+local ESPLibrary = loadstring(game:HttpGet('https://raw.githubusercontent.com/Marcel46509/Scripts/refs/heads/main/v3_esp.luau'))()
+
+local Window = Library:CreateWindow("uwuware", Vector2.new(450, 552), Enum.KeyCode.Insert)
+
+local PinkieColor = Color3.fromRGB(253, 180, 255)
+
+local Theme = {
+	fontsize = 15,
+	titlesize = 18,
+	font = Enum.Font.Code,
+	background = "rbxassetid://5553946656",
+	tilesize = 90,
+	cursor = true,
+	cursorimg = "https://t0.rbxcdn.com/42f66da98c40252ee151326a82aab51f",
+	backgroundcolor = Color3.fromRGB(20, 20, 20),
+	tabstextcolor = Color3.fromRGB(240, 240, 240),
+	bordercolor = Color3.fromRGB(60, 60, 60),
+	accentcolor = Color3.fromRGB(28, 56, 139),
+	accentcolor2 = Color3.fromRGB(16, 31, 78),
+	outlinecolor = Color3.fromRGB(60, 60, 60),
+	outlinecolor2 = Color3.fromRGB(0, 0, 0),
+	sectorcolor = Color3.fromRGB(30, 30, 30),
+	toptextcolor = Color3.fromRGB(255, 255, 255),
+	topheight = 48,
+	topcolor = Color3.fromRGB(30, 30, 30),
+	topcolor2 = Color3.fromRGB(30, 30, 30),
+	buttoncolor = Color3.fromRGB(49, 49, 49),
+	buttoncolor2 = Color3.fromRGB(39, 39, 39),
+	itemscolor = Color3.fromRGB(200, 200, 200),
+	itemscolor2 = Color3.fromRGB(210, 210, 210)
+}
+
+--//
+
+Window:UpdateTheme(Theme)
+
+--//
+
+local Legit = Window:CreateTab("Legit")
+
+--//
+
+local Rage = Window:CreateTab("Rage")
+
+local AimLock = Rage:CreateSector("Aimlock", "Left")
+
+AimLock:AddToggle("Enabled", false, function(Toggle : boolean)
+	
+end)
+
+AimLock:AddToggle("Teammates", false, function(Toggle : boolean)
+	
+end)
+
+local RageOther = Rage:CreateSector("Other", "Right")
+
+RageOther:AddToggle("Kill All", false, function(Toggle : boolean)
+	
+end)
+
+--//
+
+local Visuals = Window:CreateTab("Visuals")
+
+--..
+
+local ESP = Visuals:CreateSector("ESP", "Left")
+
+ESP:AddToggle("Enabled", false, function(Toggle : boolean)
+	ESPLibrary.enabled = true
+end)
+
+ESP:AddToggle("Box ESP", false, function(Toggle : boolean)
+	ESPLibrary.team_boxes[1] = Toggle
+end):AddColorpicker(PinkieColor, function(Color : Color3)
+	ESPLibrary.team_boxes[2] = Color
+end)
+
+ESP:AddToggle("Tracers", false, function(Toggle : boolean)
+
+end):AddColorpicker(PinkieColor, function(Color : Color3)
+
+end)
+
+ESP:AddToggle("Teammates", false, function(Toggle : boolean)
+	ESPLibrary.teamcheck = Toggle
+end)
+
+--..
+
+local Local = Visuals:CreateSector("Client-Sided", "Right")
+
+Local:AddToggle("Viewmodel Chams", false, function(Color : Color3)
+	
+end):AddColorpicker(PinkieColor, function(Color : Color3)
+
+end)
+
+--..
+
+local Materials = {}
+
+for _, material in pairs(Enum.Material:GetEnumItems()) do
+	table.insert(Materials, material.Name)
+end
+
+Local:AddDropdown(nil, Materials, Materials[1], false, function(Selected : string)
+	
+end)
+
+--..
+
+Local:AddToggle("Weapon Chams", false, function(Color : Color3)
+
+end):AddColorpicker(PinkieColor, function(Color : Color3)
+
+end)
+
+Local:AddDropdown(nil, Materials, Materials[1], false, function(Selected : string)
+	
+end)
+
+--//
+
+local Misc = Window:CreateTab("Misc")
+
+--//
+
+local Exploits = Window:CreateTab("Exploits")
+
+--//
+
+local Scripts = Window:CreateTab("Scripts")
+
+--//
+
+local Settings = Window:CreateTab("Settings")
+
+local Menu = Settings:CreateSector("Menu", "Left")
+
+Menu:AddColorpicker("Theme Color", PinkieColor, function(Color : Color3)
+	Theme.accentcolor = Color
+	
+	Window:UpdateTheme(Theme)
+end)
+
+local SettingsOther = Settings:CreateSector("Other", "Right")
+
+SettingsOther:AddButton("Copy Discord Invite", function()
+	
+end)
+
+pcall(function()
+	Settings:CreateConfigSystem("Right")
+end)
