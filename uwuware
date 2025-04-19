@@ -187,6 +187,10 @@ Menu:AddColorpicker("Theme Color", PinkieColor, function(Color : Color3)
     Watermark:UpdateTheme(Theme)
 end)
 
+Menu:AddToggle("Watermark", true, function(Toggle : boolean)
+    Watermark.Visible = Toggle
+end)
+
 pcall(function()
 	Settings:CreateConfigSystem("Right")
 end)
