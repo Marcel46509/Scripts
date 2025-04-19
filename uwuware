@@ -46,7 +46,7 @@ ESPLibrary.outlines = false
 ESPLibrary.shortnames = false
 
 ESPLibrary.team_boxes = { false, PinkieColor,Color3.fromRGB(1,1,1), 0 }
---ESPLibrary.team_chams = { true, Color3.fromRGB(138, 139, 194), Color3.fromRGB(138, 139, 194), .25, .75, true}
+ESPLibrary.team_chams = { false, PinkieColor, PinkieColor, .25, .75, true}
 ESPLibrary.team_names = { false, PinkieColor }
 --ESPLibrary.team_weapon = { true, PinkieColor }
 ESPLibrary.team_distance = false
@@ -94,6 +94,13 @@ end):AddColorpicker(PinkieColor, function(Color : Color3)
     ESPLibrary.team_boxes[2] = Color
 end)
 
+ESP:AddToggle("Chams ESP", false, function(Toggle : boolean)
+    ESPLibrary.team_chams[1] = Toggle
+end):AddColorpicker(PinkieColor, function(Color : Color3)
+    ESPLibrary.team_chams[2] = Color
+	ESPLibrary.team_chams[3] = Color
+end)
+
 --[[
 ESP:AddToggle("Tracers", false, function(Toggle : boolean)
 
@@ -102,7 +109,7 @@ end):AddColorpicker(PinkieColor, function(Color : Color3)
 end)
 --]]
 
-ESP:AddToggle("Names", false, function(Toggle : boolean)
+ESP:AddToggle("Name ESP", false, function(Toggle : boolean)
 	ESPLibrary.team_names[1] = Toggle
 end):AddColorpicker(PinkieColor, function(Color : Color3)
     ESPLibrary.team_names[2] = Color
