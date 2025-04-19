@@ -10,6 +10,7 @@ local camera = workspace.CurrentCamera
 
 if (runService:IsStudio()) then
 	coregui = localPlayer.PlayerGui
+	--Drawing = {}
 end
 
 local esp = {
@@ -154,17 +155,20 @@ function esp.getcharacter(plr)
 end
 
 function esp.checkalive(plr)
-	if not plr then plr = localPlayer end
+	if (not plr) then plr = localPlayer end
+
 	local pass = false
 	if (plr.Character and plr.Character:FindFirstChild('Humanoid') and plr.Character:FindFirstChild('Head') and plr.Character:FindFirstChild('LeftUpperArm') and plr.Character.Humanoid.Health > 0 and plr.Character.LeftUpperArm.Transparency == 0) then
 		pass = true
 	end
+
 	return pass
 end
 
-function esp.checkteam(plr, bool)
-	if not plr then plr = localPlayer end
-	return plr ~= localPlayer and bool or plr.Team ~= localPlayer.Team
+function esp.checkteam(plr : Player, bool) --> One and only team check thing
+	if (not plr) then plr = localPlayer end
+
+	return (((plr ~= localPlayer) and bool) or plr.TeamColor ~= localPlayer.TeamColor)
 end
 
 function esp:checkvisible(instance, origin, params)
