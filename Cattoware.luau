@@ -22,6 +22,10 @@ local function safeParent(instance : any)
 	if (runservice:IsStudio()) then
 		instance.Parent = player.PlayerGui
 	else
+		if (coregui:FindFirstChild(instance.Name)) then
+			coregui[instance.Name]:Destroy()
+		end
+		
 		instance.Parent = coregui
 	end
 end
