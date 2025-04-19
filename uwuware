@@ -1,7 +1,9 @@
+--//Locals
 local Library = loadstring(game:HttpGet('https://raw.githubusercontent.com/Marcel46509/Scripts/refs/heads/main/Cattoware.luau'))()
 local ESPLibrary = loadstring(game:HttpGet('https://raw.githubusercontent.com/Marcel46509/Scripts/refs/heads/main/v3_esp.luau'))()
 
 local Window = Library:CreateWindow("uwuware", Vector2.new(450, 552), Enum.KeyCode.Insert)
+local Watermark = Library:CreateWatermark("uwuware | {fps}", Vector2.new(1400, -48))
 
 local PinkieColor = Color3.fromRGB(253, 180, 255)
 
@@ -11,7 +13,7 @@ local Theme = {
 	font = Enum.Font.Code,
 	background = "rbxassetid://5553946656",
 	tilesize = 90,
-	cursor = true,
+	cursor = false,
 	cursorimg = "https://t0.rbxcdn.com/42f66da98c40252ee151326a82aab51f",
 	backgroundcolor = Color3.fromRGB(20, 20, 20),
 	tabstextcolor = Color3.fromRGB(240, 240, 240),
@@ -31,9 +33,24 @@ local Theme = {
 	itemscolor2 = Color3.fromRGB(210, 210, 210)
 }
 
---//
+--//Scripts
 
 Window:UpdateTheme(Theme)
+Watermark:UpdateTheme(Theme)
+
+--//
+
+ESPLibrary.teamcheck = true
+
+ESPLibrary.outlines = false
+ESPLibrary.shortnames = false
+
+ESPLibrary.team_boxes = { false, PinkieColor,Color3.fromRGB(1,1,1), 0 }
+--ESPLibrary.team_chams = { true, Color3.fromRGB(138, 139, 194), Color3.fromRGB(138, 139, 194), .25, .75, true}
+ESPLibrary.team_names = { false, PinkieColor }
+--ESPLibrary.team_weapon = { true, PinkieColor }
+ESPLibrary.team_distance = false
+ESPLibrary.team_health = false
 
 --//
 
@@ -46,17 +63,17 @@ local Rage = Window:CreateTab("Rage")
 local AimLock = Rage:CreateSector("Aimlock", "Left")
 
 AimLock:AddToggle("Enabled", false, function(Toggle : boolean)
-	
+
 end)
 
 AimLock:AddToggle("Teammates", false, function(Toggle : boolean)
-	
+
 end)
 
 local RageOther = Rage:CreateSector("Other", "Right")
 
 RageOther:AddToggle("Kill All", false, function(Toggle : boolean)
-	
+
 end)
 
 --//
@@ -68,23 +85,47 @@ local Visuals = Window:CreateTab("Visuals")
 local ESP = Visuals:CreateSector("ESP", "Left")
 
 ESP:AddToggle("Enabled", false, function(Toggle : boolean)
-	ESPLibrary.enabled = true
+	ESPLibrary.enabled = Toggle
 end)
 
 ESP:AddToggle("Box ESP", false, function(Toggle : boolean)
-	ESPLibrary.team_boxes[1] = Toggle
+    ESPLibrary.team_boxes[1] = Toggle
 end):AddColorpicker(PinkieColor, function(Color : Color3)
-	ESPLibrary.team_boxes[2] = Color
+    ESPLibrary.team_boxes[2] = Color
 end)
 
+--[[
 ESP:AddToggle("Tracers", false, function(Toggle : boolean)
 
 end):AddColorpicker(PinkieColor, function(Color : Color3)
 
 end)
+--]]
+
+ESP:AddToggle("Names", false, function(Toggle : boolean)
+	ESPLibrary.team_names[1] = Toggle
+end):AddColorpicker(PinkieColor, function(Color : Color3)
+    ESPLibrary.team_names[2] = Color
+end)
+
+ESP:AddToggle("Short Names", false, function(Toggle : boolean)
+	ESPLibrary.shortnames = Toggle
+end)
+
+ESP:AddToggle("Distance", false, function(Toggle : boolean)
+	ESPLibrary.team_distance = Toggle
+end)
+
+ESP:AddToggle("Health", false, function(Toggle : boolean)
+	ESPLibrary.team_health = Toggle
+end)
+
+ESP:AddToggle("Outlines", false, function(Toggle : boolean)
+	ESPLibrary.outlines = Toggle
+end)
 
 ESP:AddToggle("Teammates", false, function(Toggle : boolean)
-	ESPLibrary.teamcheck = Toggle
+	ESPLibrary.teamcheck = (not Toggle)
 end)
 
 --..
@@ -92,7 +133,7 @@ end)
 local Local = Visuals:CreateSector("Client-Sided", "Right")
 
 Local:AddToggle("Viewmodel Chams", false, function(Color : Color3)
-	
+
 end):AddColorpicker(PinkieColor, function(Color : Color3)
 
 end)
@@ -106,7 +147,7 @@ for _, material in pairs(Enum.Material:GetEnumItems()) do
 end
 
 Local:AddDropdown(nil, Materials, Materials[1], false, function(Selected : string)
-	
+
 end)
 
 --..
@@ -118,7 +159,7 @@ end):AddColorpicker(PinkieColor, function(Color : Color3)
 end)
 
 Local:AddDropdown(nil, Materials, Materials[1], false, function(Selected : string)
-	
+
 end)
 
 --//
@@ -141,16 +182,19 @@ local Menu = Settings:CreateSector("Menu", "Left")
 
 Menu:AddColorpicker("Theme Color", PinkieColor, function(Color : Color3)
 	Theme.accentcolor = Color
-	
+
 	Window:UpdateTheme(Theme)
-end)
-
-local SettingsOther = Settings:CreateSector("Other", "Right")
-
-SettingsOther:AddButton("Copy Discord Invite", function()
-	
+    Watermark:UpdateTheme(Theme)
 end)
 
 pcall(function()
 	Settings:CreateConfigSystem("Right")
 end)
+
+local SettingsOther = Settings:CreateSector("Other", "Right")
+
+SettingsOther:AddButton("Copy Discord Invite", function()
+
+end)
+
+--//End
