@@ -1,4 +1,7 @@
 ---@vars
+
+local RenderConnection
+
 local runService = game:GetService('RunService')
 local coregui = game:GetService('CoreGui')
 local players = game:GetService('Players')
@@ -96,7 +99,6 @@ local SUB       = string.sub
 local TINSERT   = table.insert
 local TFIND     = table.find
 
-
 -- functions
 function esp:draw(a, b)
 	local instance = Drawing.new(a)
@@ -107,6 +109,7 @@ function esp:draw(a, b)
 	end
 	return instance
 end
+
 function esp:create(a, b)
 	local instance = Instance.new(a)
 	if type(b) == 'table' then
@@ -116,13 +119,16 @@ function esp:create(a, b)
 	end
 	return instance
 end
+
 local folder = esp:create('Folder', { Parent = coregui })
+
 function esp:setproperties(a, b)
 	for i, v in next, b do
 		a[i] = v;
 	end
 	return a
 end
+
 function esp:raycast(a, b, c)
 	c = type(c) == 'table' and c or {}
 	local params = RaycastParams.new();
@@ -201,6 +207,7 @@ function esp:returntriangleoffsets(triangle)
 	local minY = MIN(triangle.PointA.Y, triangle.PointB.Y, triangle.PointC.Y)
 	local maxX = MAX(triangle.PointA.X, triangle.PointB.X, triangle.PointC.X)
 	local maxY = MAX(triangle.PointA.Y, triangle.PointB.Y, triangle.PointC.Y)
+
 	return minX, minY, maxX, maxY
 end
 
@@ -215,14 +222,18 @@ end;
 function esp:floorvector(vector)
 	return NEWVEC2(FLOOR(vector.X),FLOOR(vector.Y))
 end
+
 function esp:rotatevector2(v2, r)
 	local c = COS(r);
 	local s = SIN(r);
 	return NEWVEC2(c * v2.X - s * v2.Y, s * v2.X + c * v2.Y);
 end;
+
 --
+
 function esp:add(plr)
 	if plr == localPlayer then return end
+
 	local objs = {
 		box_fill = esp:draw('Square', { Filled = true, Thickness = 1 }),
 		box_outline = esp:draw('Square', { Filled = false, Thickness = 1 }),
@@ -252,11 +263,13 @@ function esp:add(plr)
 		weapon = esp:draw('Text', { Color = NEWCOLOR3(1,1,1), Font = 2, Size = 13 }),
 		health = esp:draw('Text', { Color = NEWCOLOR3(1,1,1), Font = 2, Size = 13, Center = true })
 	}
+
 	local chams = { ins = esp:create('Highlight', { Name = plr.Name }) }
 	function chams:Remove() chams.ins:Destroy() end
 	objs['chams'] = chams
 	self.players[plr.Name] = objs
 end
+
 function esp:disable(plr)
 	local objects = self.players[plr.Name];
 	if objects then
@@ -269,6 +282,7 @@ function esp:disable(plr)
 		end;
 	end;
 end;
+
 function esp:remove(plr)
 	local objects = self.players[plr.Name];
 	if objects then
@@ -278,6 +292,7 @@ function esp:remove(plr)
 	end;
 	self.players[plr.Name] = nil;
 end;
+
 -- connections
 function esp:connect(a, callback)
 	local c = a:Connect(callback)
@@ -287,11 +302,14 @@ end
 
 function esp:bindtorenderstep(name, priority, callback)
 	local a = {}
+
 	function a:Disconnect()
 		runService:UnbindFromRenderStep(name)
 	end
+
 	runService:BindToRenderStep(name, priority, callback)
 	TINSERT(self.connections, a)
+
 	return a
 end
 
@@ -305,6 +323,7 @@ function esp:update()
 	for plr, drawing in next, esp.players do
 		local player = players:FindFirstChild(plr)
 		if not player then esp.players[plr] = nil continue end
+
 		if esp.enabled and esp.checkalive(player) then
 			local character = esp.getcharacter(player)
 			local playerName = LEN(plr) > esp.maxchar and esp.shortnames and SUB(plr, 0, esp.maxchar) .. '..' or plr
@@ -318,10 +337,12 @@ function esp:update()
 				maxdistance = esp.maxdistance,
 				factor = esp.fadefactor
 			})
+
 			local kevlar = 0
 			if player:FindFirstChild('Kevlar') then
 				kevlar = player.Kevlar.Value
 			end
+
 			local health = FLOOR(character.Humanoid.Health)
 
 			local flag = 'team_'
@@ -339,24 +360,29 @@ function esp:update()
 
 			-- arrows
 			drawing.arrow.Visible = esp[ flag .. 'arrow'][1] and pass;
+
 			if drawing.arrow.Visible then
 				local proj = camera.CFrame:PointToObjectSpace(centerMassPos.p);
 				local ang = ATAN2(proj.Z, proj.X);
 				local dir = NEWVEC2(COS(ang), SIN(ang));
 				local a = (dir * esp.arrowradius * .5) + camera.ViewportSize / 2;
 				local b, c = a - esp:rotatevector2(dir, RAD(30)) * esp.arrowsize, a - esp:rotatevector2(dir, (-RAD(30))) * esp.arrowsize;
-				drawing.arrow.PointA = a;
+
+                drawing.arrow.PointA = a;
 				drawing.arrow.PointB = b;
 				drawing.arrow.PointC = c;
 				drawing.arrow.Color = esp[ flag .. 'arrow'][2];
 				drawing.arrow.Transparency = not onScreen and esp[ flag .. 'arrow'][3] or 0;
-				if esp.arrowinfo then
+
+                if esp.arrowinfo then
 					local smallestX, smallestY, biggestX, biggestY = esp:returntriangleoffsets(drawing.arrow)
-					-- healthbar
+
+                    -- healthbar
 					drawing.arrow_bar.Visible = not onScreen and drawing.arrow.Visible and esp[ flag .. 'healthbar'][1]
 					drawing.arrow_bar_inline.Visible = drawing.arrow_bar.Visible
 					drawing.arrow_bar_outline.Visible = esp.outlines and drawing.arrow_bar.Visible
-					if drawing.arrow_bar.Visible then
+
+                    if drawing.arrow_bar.Visible then
 						drawing.arrow_bar.Color = esp[ flag .. 'healthbar'][3]:Lerp(esp[ flag .. 'healthbar'][2], health / 100)
 						drawing.arrow_bar.Size = esp:floorvector(NEWVEC2(1, ( - health / 100 * ( biggestY - smallestY + 2)) + 3))
 						drawing.arrow_bar.Position = esp:floorvector(NEWVEC2(smallestX - 3, smallestY + drawing.arrow_bar_outline.Size.Y))
@@ -373,7 +399,8 @@ function esp:update()
 					drawing.arrow_kevlarbar.Visible = not onScreen and drawing.arrow.Visible and esp[ flag .. 'kevlarbar'][1]
 					drawing.arrow_kevlarbar_inline.Visible = drawing.arrow_kevlarbar.Visible
 					drawing.arrow_kevlarbar_outline.Visible = esp.outlines and drawing.arrow_kevlarbar.Visible
-					if drawing.arrow_kevlarbar.Visible then
+
+                    if drawing.arrow_kevlarbar.Visible then
 						drawing.arrow_kevlarbar.Color = esp[ flag .. 'kevlarbar'][3]:Lerp(esp[ flag .. 'kevlarbar'][2], kevlar / 100)
 						drawing.arrow_kevlarbar.Size = esp:floorvector(NEWVEC2(( kevlar / 100 * ( biggestX - smallestX)), 1))
 						drawing.arrow_kevlarbar.Position = esp:floorvector(NEWVEC2(smallestX, biggestY + 2))
@@ -409,7 +436,8 @@ function esp:update()
 			drawing.chams.ins.Enabled = esp[ flag .. 'chams'][1] and pass
 			drawing.chams.ins.Adornee = esp[ flag .. 'chams'][1] and player.Character or nil
 			drawing.chams.ins.Parent = folder
-			if drawing.chams.ins.Enabled then
+
+            if drawing.chams.ins.Enabled then
 				drawing.chams.ins.FillColor = esp[ flag .. 'chams'][2]
 				drawing.chams.ins.OutlineColor = esp[ flag .. 'chams'][3]
 				drawing.chams.ins.FillTransparency = esp[ flag .. 'chams'][4]
@@ -447,7 +475,8 @@ function esp:update()
 			drawing.box.Visible = esp[ flag .. 'boxes'][1]
 			drawing.box_fill.Visible = drawing.box.Visible
 			drawing.box_outline.Visible = esp.outlines and drawing.box.Visible
-			if drawing.box.Visible then
+
+            if drawing.box.Visible then
 				drawing.box.Color = esp[ flag .. 'boxes'][2]
 				drawing.box.Size = esp:floorvector(NEWVEC2(biggestX - smallestX, biggestY - smallestY))
 				drawing.box.Position = esp:floorvector(NEWVEC2(smallestX, smallestY))
@@ -467,7 +496,8 @@ function esp:update()
 			drawing.bar.Visible = esp[ flag .. 'healthbar'][1]
 			drawing.bar_inline.Visible = drawing.bar.Visible
 			drawing.bar_outline.Visible = esp.outlines and drawing.bar.Visible
-			if drawing.bar.Visible then
+
+            if drawing.bar.Visible then
 				drawing.bar.Color = esp[ flag .. 'healthbar'][3]:Lerp(esp[ flag .. 'healthbar'][2], health / 100)
 				drawing.bar.Size = esp:floorvector(NEWVEC2(1, ( - health / 100 * ( biggestY - smallestY + 2)) + 3))
 				drawing.bar.Position = esp:floorvector(NEWVEC2(smallestX - 3, smallestY + drawing.bar_outline.Size.Y))
@@ -484,7 +514,8 @@ function esp:update()
 			drawing.kevlarbar.Visible = esp[ flag .. 'kevlarbar'][1]
 			drawing.kevlarbar_inline.Visible = drawing.kevlarbar.Visible
 			drawing.kevlarbar_outline.Visible = esp.outlines and drawing.kevlarbar.Visible
-			if drawing.kevlarbar.Visible then
+
+            if drawing.kevlarbar.Visible then
 				drawing.kevlarbar.Color = esp[ flag .. 'kevlarbar'][3]:Lerp(esp[ flag .. 'kevlarbar'][2], kevlar / 100)
 				drawing.kevlarbar.Size = esp:floorvector(NEWVEC2(( kevlar / 100 * ( biggestX - smallestX)), 1))
 				drawing.kevlarbar.Position = esp:floorvector(NEWVEC2(smallestX, biggestY + 2))
@@ -500,7 +531,8 @@ function esp:update()
 			-- distance
 			drawing.distance.Visible = not esp[ flag .. 'names'][1] and esp[ flag .. 'distance']
 			drawing.distance_outline.Visible = esp.outlines and drawing.distance.Visible
-			if drawing.distance.Visible then
+
+            if drawing.distance.Visible then
 				drawing.distance.Text = '['..distance..']'
 				drawing.distance.Font = Drawing.Fonts[esp.font]
 				drawing.distance.Size = esp.textsize
@@ -517,7 +549,8 @@ function esp:update()
 			-- name
 			drawing.name.Visible = esp[ flag .. 'names'][1]
 			drawing.name_outline.Visible = esp.outlines and drawing.name.Visible
-			if drawing.name.Visible then
+
+            if drawing.name.Visible then
 				drawing.name.Text = esp[ flag .. 'distance'] and '['..distance..'] '..playerName or playerName
 				drawing.name.Font = Drawing.Fonts[esp.font]
 				drawing.name.Size = esp.textsize
@@ -533,7 +566,8 @@ function esp:update()
 
 			-- health
 			drawing.health.Visible = health ~= 100 and health ~= 0  and esp[flag .. 'health']
-			if drawing.health.Visible then
+
+            if drawing.health.Visible then
 				drawing.health.Text = tostring(health)
 				drawing.health.Font = Drawing.Fonts[esp.font]
 				drawing.health.Size = esp.textsize
@@ -546,7 +580,8 @@ function esp:update()
 			-- weapon
 			drawing.weapon.Visible = esp[ flag .. 'weapon'][1]
 			drawing.weapon_outline.Visible = esp.outlines and drawing.weapon.Visible
-			if drawing.weapon.Visible then
+
+            if drawing.weapon.Visible then
 				drawing.weapon.Text = LOWER(character.EquippedTool.Value) or nil
 				drawing.weapon.Font = Drawing.Fonts[esp.font]
 				drawing.weapon.Size = esp.textsize
@@ -565,16 +600,18 @@ function esp:update()
 	end
 end
 
-for i, plr in next, players:GetPlayers() do
+for _, plr in ipairs(players:GetPlayers()) do
 	esp:add(plr)
 end
+
 esp:connect(players.PlayerAdded, function(plr)
 	esp:add(plr)
 end)
+
 esp:connect(players.PlayerRemoving, function(plr)
 	esp:remove(plr)
 end)
 
-esp:bindtorenderstep('esp', 999, esp.update)
+RenderConnection = runService.RenderStepped:Connect(esp.update)
 
 return esp
