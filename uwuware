@@ -1,4 +1,10 @@
 --//Locals
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+local LocalPlayer = Players.LocalPlayer
+local Mouse = LocalPlayer:GetMouse()
+
 local Library = loadstring(game:HttpGet('https://raw.githubusercontent.com/Marcel46509/Scripts/refs/heads/main/Cattoware.luau'))()
 local ESPLibrary = loadstring(game:HttpGet('https://raw.githubusercontent.com/Marcel46509/Scripts/refs/heads/main/v3_esp.luau'))()
 
@@ -6,6 +12,12 @@ local Window = Library:CreateWindow("uwuware", Vector2.new(450, 552), Enum.KeyCo
 local Watermark = Library:CreateWatermark("uwuware | {fps}", Vector2.new(1400, -48))
 
 local PinkieColor = Color3.fromRGB(253, 180, 255)
+
+local Configuration = {}
+local RunScripts = {
+	["https://raw.githubusercontent.com/Marcel46509/Scripts/refs/heads/main/KeyStrokes.luau"] = "Key Strokes",
+	["https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"] = "Infinite Yield"
+}
 
 local Theme = {
 	fontsize = 15,
@@ -76,6 +88,10 @@ RageOther:AddToggle("Kill All", false, function(Toggle : boolean)
 
 end)
 
+RageOther:AddToggle("Triggerbot", false, function(Toggle : boolean)
+	Configuration.Triggerbot = Toggle
+end)
+
 --//
 
 local Visuals = Window:CreateTab("Visuals")
@@ -89,15 +105,15 @@ ESP:AddToggle("Enabled", false, function(Toggle : boolean)
 end)
 
 ESP:AddToggle("Box ESP", false, function(Toggle : boolean)
-    ESPLibrary.team_boxes[1] = Toggle
+	ESPLibrary.team_boxes[1] = Toggle
 end):AddColorpicker(PinkieColor, function(Color : Color3)
-    ESPLibrary.team_boxes[2] = Color
+	ESPLibrary.team_boxes[2] = Color
 end)
 
 ESP:AddToggle("Chams ESP", false, function(Toggle : boolean)
-    ESPLibrary.team_chams[1] = Toggle
+	ESPLibrary.team_chams[1] = Toggle
 end):AddColorpicker(PinkieColor, function(Color : Color3)
-    ESPLibrary.team_chams[2] = Color
+	ESPLibrary.team_chams[2] = Color
 	ESPLibrary.team_chams[3] = Color
 end)
 
@@ -112,7 +128,7 @@ end)
 ESP:AddToggle("Name ESP", false, function(Toggle : boolean)
 	ESPLibrary.team_names[1] = Toggle
 end):AddColorpicker(PinkieColor, function(Color : Color3)
-    ESPLibrary.team_names[2] = Color
+	ESPLibrary.team_names[2] = Color
 end)
 
 ESP:AddToggle("Short Names", false, function(Toggle : boolean)
@@ -181,6 +197,16 @@ local Exploits = Window:CreateTab("Exploits")
 
 local Scripts = Window:CreateTab("Scripts")
 
+local ScriptsMain = Scripts:CreateSector("Scripts", "Left")
+
+ScriptsMain:AddDropdown("Script", RunScripts, "script", false, function(Selected : string)
+	Configuration.SelectedScript = Selected
+end)
+
+ScriptsMain:AddButton("Run Script", function()
+	loadstring(game:HttpGet(tostring(Configuration.SelectedScript)))()
+end)
+
 --//
 
 local Settings = Window:CreateTab("Settings")
@@ -191,11 +217,11 @@ Menu:AddColorpicker("Theme Color", PinkieColor, function(Color : Color3)
 	Theme.accentcolor = Color
 
 	Window:UpdateTheme(Theme)
-    Watermark:UpdateTheme(Theme)
+	Watermark:UpdateTheme(Theme)
 end)
 
 Menu:AddToggle("Watermark", true, function(Toggle : boolean)
-    Watermark.Visible = Toggle
+	Watermark.Visible = Toggle
 end)
 
 pcall(function()
@@ -206,6 +232,25 @@ local SettingsOther = Settings:CreateSector("Other", "Right")
 
 SettingsOther:AddButton("Copy Discord Invite", function()
 
+end)
+
+--//
+
+local Connection
+
+Connection = RunService.RenderStepped:Connect(function()
+	if ((not Window) or (not Window.Main)) then
+		Connection:Disconnect()
+		return
+	end
+
+	--//
+
+	if (Configuration["Triggerbot"]) then
+		if ((Mouse.Target) and (Mouse.Target.Parent:FindFirstChildOfClass("Humanoid"))) then
+			mouse1click()
+		end
+	end
 end)
 
 --//End
