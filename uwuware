@@ -204,7 +204,12 @@ ScriptsMain:AddDropdown("Script", RunScripts, "script", false, function(Selected
 end)
 
 ScriptsMain:AddButton("Run Script", function()
-	loadstring(game:HttpGet(tostring(Configuration.SelectedScript)))()
+	for load, name in next, RunScripts do
+		if (name == Configuration.SelectedScript) then
+			loadstring(game:HttpGet(load))()
+			break
+		end
+	end
 end)
 
 --//
