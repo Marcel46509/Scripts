@@ -5,6 +5,7 @@ local UserInputService = game:GetService("UserInputService")
 
 local LocalPlayer = Players.LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
+local CurrentCamera = workspace.CurrentCamera
 
 local Library = loadstring(game:HttpGet('https://raw.githubusercontent.com/Marcel46509/Scripts/refs/heads/main/Cattoware.luau'))()
 local ESPLibrary = loadstring(game:HttpGet('https://raw.githubusercontent.com/Marcel46509/Scripts/refs/heads/main/v3_esp.luau'))()
@@ -45,6 +46,55 @@ local Theme = {
 	itemscolor = Color3.fromRGB(200, 200, 200),
 	itemscolor2 = Color3.fromRGB(210, 210, 210)
 }
+
+--//Functions
+
+local function IsVisible(Position : Vector3, IgnoreList : {any})
+	local Head : BasePart = ((LocalPlayer.Character) and (LocalPlayer.Character:FindFirstChild("Head")))
+
+	if ((Head) and (#CurrentCamera:GetPartsObscuringTarget({Head.Position, Position}, IgnoreList) == 0)) then
+		return true
+	end
+
+	return false
+end
+
+--//Main
+
+local function GetClosestPlayer(FOV : number)
+	local ClosestPlayer = nil
+
+	for _, player in ipairs(Players:GetPlayers()) do
+		if (player == LocalPlayer) then continue end
+
+		local Head = ((player.Character) and (player.Character:FindFirstChild("Head")))
+		if (not Head) then continue end
+
+		--..
+
+		if (Configuration.Aimbot_VisibleOnly) then
+			if (not IsVisible(Head.Position, {player.Character, LocalPlayer.Character, CurrentCamera})) then
+				continue
+			end
+		end
+
+		--//
+
+		local ViewportPoint, isOnScreen = CurrentCamera:WorldToViewportPoint(Head.Position)
+
+		if (isOnScreen) then
+			local screenPosition = Vector2.new(ViewportPoint.X, ViewportPoint.Y)
+			local distance = (UserInputService:GetMouseLocation() - screenPosition).Magnitude
+
+			if (distance < FOV) then
+				ClosestPlayer = player
+				FOV = distance
+			end
+		end
+	end
+
+	return ClosestPlayer
+end
 
 --//Scripts
 
@@ -93,14 +143,14 @@ end)
 
 Aimbot:AddToggle("Aim Assist", false, function(Toggle : boolean)
 	Configuration.AssistAim = Toggle
-end)
+end):AddKeybind(Enum.KeyCode.E, "AimAssist")
 
 Aimbot:AddToggle("Visible Only", false, function(Toggle : boolean)
-
+	Configuration.Aimbot_VisibleOnly = Toggle
 end)
 
 Aimbot:AddToggle("Teammates", false, function(Toggle : boolean)
-
+	Configuration.Aimbot_Teammates = Toggle
 end)
 
 Aimbot:AddSlider("Aim Assist FOV", 1, 1, 1000, 1, function(Value : number)
@@ -116,7 +166,7 @@ Aimbot:AddSlider("Smoothness", 1, 1, 10, 1, function(Value : number)
 end)
 
 Aimbot:AddDropdown("Hitboxes", {"Head", "Body", "Arms", "Legs"}, nil, true, function(Selected : string)
-
+	Configuration.Hitboxes = Selected
 end)
 
 --//
@@ -366,6 +416,17 @@ Connection = RunService.RenderStepped:Connect(function()
 					end
 				end)
 			end
+		end
+	end
+
+	--//
+
+	if (Configuration["AssistAim"]) then
+		local ClosestPlayer = GetClosestPlayer(Configuration.AssistFOV)
+		local Hitbox = ((ClosestPlayer) and (ClosestPlayer.Character) and (ClosestPlayer.Character:FindFirstChild("Head")))
+
+		if (Hitbox) then
+			CurrentCamera.CFrame = CFrame.new(CurrentCamera.CFrame.Position, Hitbox.Position)
 		end
 	end
 end)
