@@ -1,7 +1,6 @@
 --//Locals
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
-local UserInputService = game:GetService("UserInputService")
 
 local LocalPlayer = Players.LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
@@ -332,7 +331,7 @@ Connection = RunService.RenderStepped:Connect(function()
 		Configuration.AssistCircle.Thickness = 1
 		Configuration.AssistCircle.Filled = false
 		Configuration.AssistCircle.NumSides = 60
-		Configuration.AssistCircle.Position = Vector2(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y)
+		Configuration.AssistCircle.Position = Vector2(Mouse.X, Mouse.Y)
 
 		--//
 
@@ -342,7 +341,7 @@ Connection = RunService.RenderStepped:Connect(function()
 		Configuration.SilentCircle.Thickness = 1
 		Configuration.SilentCircle.Filled = false
 		Configuration.SilentCircle.NumSides = 60
-		Configuration.SilentCircle.Position = Vector2(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y)
+		Configuration.SilentCircle.Position = Vector2(Mouse.X, Mouse.Y)
 	end
 
 	--//
