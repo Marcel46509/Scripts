@@ -138,12 +138,16 @@ local Legit = Window:CreateTab("Legit")
 local Aimbot = Legit:CreateSector("Aimbot", "Left")
 
 Aimbot:AddToggle("Enabled", false, function(Toggle : boolean)
-	Configuration.SilentAim = Toggle
+	Configuration.Aimbot_Enabled = Toggle
 end)
 
 Aimbot:AddToggle("Aim Assist", false, function(Toggle : boolean)
 	Configuration.AssistAim = Toggle
 end):AddKeybind(Enum.KeyCode.E, "AimAssist")
+
+Aimbot:AddToggle("Silent Aim", false, function(Toggle : boolean)
+	Configuration.SilentAim = Toggle
+end)
 
 Aimbot:AddToggle("Visible Only", false, function(Toggle : boolean)
 	Configuration.Aimbot_VisibleOnly = Toggle
@@ -372,7 +376,7 @@ Connection = RunService.RenderStepped:Connect(function()
 
 	--//
 
-	if (Configuration.FOVCircle) then
+	if ((Configuration.FOVCircle) and (Configuration.Aimbot_Enabled)) then
 		local mouseLocation = UserInputService:GetMouseLocation()
 
 		--//
@@ -421,7 +425,7 @@ Connection = RunService.RenderStepped:Connect(function()
 
 	--//
 
-	if (Configuration["AssistAim"]) then
+	if ((Configuration["Aimbot_Enabled"])) and (Configuration["AssistAim"]) then
 		local ClosestPlayer = GetClosestPlayer(Configuration.AssistFOV)
 		local Hitbox = ((ClosestPlayer) and (ClosestPlayer.Character) and (ClosestPlayer.Character:FindFirstChild("Head")))
 
