@@ -1,6 +1,7 @@
 --//Locals
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
 
 local LocalPlayer = Players.LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
@@ -52,6 +53,22 @@ Watermark:UpdateTheme(Theme)
 
 --//
 
+xpcall(function()
+	Configuration.AssistCircle = Drawing.new("Circle")
+	Configuration.SilentCircle = Drawing.new("Circle")
+
+	Configuration.AssistCircle.Visible = false
+	Configuration.SilentCircle.Visible = false
+
+	Configuration.AssistCircle.Color = PinkieColor
+	Configuration.SilentCircle.Color = PinkieColor
+
+	Configuration.AssistCircle.Transparency = 0.7
+	Configuration.SilentCircle.Transparency = 0.7
+end, warn)
+
+--//
+
 ESPLibrary.teamcheck = true
 
 ESPLibrary.outlines = false
@@ -68,19 +85,43 @@ ESPLibrary.team_health = false
 
 local Legit = Window:CreateTab("Legit")
 
+local Aimbot = Legit:CreateSector("Aimbot", "Left")
+
+Aimbot:AddToggle("Enabled", false, function(Toggle : boolean)
+
+end)
+
+Aimbot:AddToggle("Aim Assist", false, function(Toggle : boolean)
+
+end)
+
+Aimbot:AddToggle("Visible Only", false, function(Toggle : boolean)
+
+end)
+
+Aimbot:AddToggle("Teammates", false, function(Toggle : boolean)
+
+end)
+
+Aimbot:AddSlider("Aim Assist FOV", 1, 1, 1000, 1, function(Value : number)
+	Configuration.AssistFOV = Value
+end)
+
+Aimbot:AddSlider("Silent Aim FOV", 1, 1, 1000, 1, function(Value : number)
+	Configuration.SilentFOV = Value
+end)
+
+Aimbot:AddSlider("Smoothness", 1, 1, 10, 1, function(Value : number)
+	Configuration.Smoothness = Value
+end)
+
+Aimbot:AddDropdown("Hitboxes", {"Head", "Body", "Arms", "Legs"}, nil, true, function(Selected : string)
+
+end)
+
 --//
 
 local Rage = Window:CreateTab("Rage")
-
-local AimLock = Rage:CreateSector("Aimlock", "Left")
-
-AimLock:AddToggle("Enabled", false, function(Toggle : boolean)
-
-end)
-
-AimLock:AddToggle("Teammates", false, function(Toggle : boolean)
-
-end)
 
 local RageOther = Rage:CreateSector("Other", "Right")
 
@@ -88,8 +129,16 @@ RageOther:AddToggle("Kill All", false, function(Toggle : boolean)
 
 end)
 
+RageOther:AddToggle("Knife Bot", false, function(Toggle : boolean)
+
+end)
+
 RageOther:AddToggle("Triggerbot", false, function(Toggle : boolean)
 	Configuration.Triggerbot = Toggle
+end)
+
+RageOther:AddSlider("Triggerbot Delay [ms]", 0, 0, 1000, 1, function(Value : number)
+	Configuration.TriggerbotDelay = (Value / 1000)
 end)
 
 --//
@@ -155,9 +204,11 @@ end)
 
 local Local = Visuals:CreateSector("Client-Sided", "Right")
 
-Local:AddToggle("Viewmodel Chams", false, function(Color : Color3)
+local VMChams = Local:AddToggle("Viewmodel Chams", false, function(Color : Color3)
 
-end):AddColorpicker(PinkieColor, function(Color : Color3)
+end)
+
+VMChams:AddColorpicker(PinkieColor, function(Color : Color3)
 
 end)
 
@@ -169,29 +220,52 @@ for _, material in pairs(Enum.Material:GetEnumItems()) do
 	table.insert(Materials, material.Name)
 end
 
-Local:AddDropdown(nil, Materials, Materials[1], false, function(Selected : string)
+VMChams:AddDropdown(Materials, Materials[1], false, function(Selected : string)
 
 end)
 
 --..
 
-Local:AddToggle("Weapon Chams", false, function(Color : Color3)
-
-end):AddColorpicker(PinkieColor, function(Color : Color3)
+local WeaponChams = Local:AddToggle("Weapon Chams", false, function(Color : Color3)
 
 end)
 
-Local:AddDropdown(nil, Materials, Materials[1], false, function(Selected : string)
+WeaponChams:AddColorpicker(PinkieColor, function(Color : Color3)
 
+end)
+
+WeaponChams:AddDropdown(Materials, Materials[1], false, function(Selected : string)
+
+end)
+
+--..
+
+local FOVCircle = Local:AddToggle("FOV Circle", false, function(Toggle : boolean)
+	Configuration.FOVCircle = Toggle
+
+	Configuration.AssistCircle.Visible = Configuration.FOVCircle
+	Configuration.SilentCircle.Visible = Configuration.FOVCircle
+end)
+
+FOVCircle:AddColorpicker(PinkieColor, function(Color : Color3)
+	Configuration.AssistCircleColor = Color
+end)
+
+FOVCircle:AddColorpicker(PinkieColor, function(Color : Color3)
+	Configuration.SilentCircleColor = Color
 end)
 
 --//
 
 local Misc = Window:CreateTab("Misc")
 
+local MiscMain = Misc:CreateSector("Main", "Left")
+
 --//
 
 local Exploits = Window:CreateTab("Exploits")
+
+local ExploitsMain = Exploits:CreateSector("Main", "Left")
 
 --//
 
@@ -229,9 +303,9 @@ Menu:AddToggle("Watermark", true, function(Toggle : boolean)
 	Watermark.Visible = Toggle
 end)
 
-pcall(function()
+xpcall(function()
 	Settings:CreateConfigSystem("Right")
-end)
+end, warn)
 
 local SettingsOther = Settings:CreateSector("Other", "Right")
 
@@ -251,9 +325,41 @@ Connection = RunService.RenderStepped:Connect(function()
 
 	--//
 
+	if (Configuration.FOVCircle) then
+		Configuration.AssistCircle.Color = (Configuration.AssistCircleColor or PinkieColor)
+
+		Configuration.AssistCircle.Radius = (Configuration.AssistFOV or 1)
+		Configuration.AssistCircle.Thickness = 1
+		Configuration.AssistCircle.Filled = false
+		Configuration.AssistCircle.NumSides = 60
+		Configuration.AssistCircle.Position = Vector2(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y)
+
+		--//
+
+		Configuration.SilentCircle.Color = (Configuration.SilentCircleColor or PinkieColor)
+
+		Configuration.SilentCircle.Radius = (Configuration.SilentFOV or 1)
+		Configuration.SilentCircle.Thickness = 1
+		Configuration.SilentCircle.Filled = false
+		Configuration.SilentCircle.NumSides = 60
+		Configuration.SilentCircle.Position = Vector2(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y)
+	end
+
+	--//
+
 	if (Configuration["Triggerbot"]) then
 		if ((Mouse.Target) and (Mouse.Target.Parent:FindFirstChildOfClass("Humanoid"))) then
-			mouse1click()
+			if (not Configuration.TriggerbotDeb) then
+				Configuration.TriggerbotDeb = true
+
+				task.delay((Configuration.TriggerbotDelay or 0), function()
+					Configuration.TriggerbotDeb = false
+
+					if ((Mouse.Target) and (Mouse.Target.Parent:FindFirstChildOfClass("Humanoid"))) then
+						mouse1click()
+					end
+				end)
+			end
 		end
 	end
 end)
