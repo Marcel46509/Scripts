@@ -1,6 +1,7 @@
 --//Locals
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
 
 local LocalPlayer = Players.LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
@@ -325,13 +326,17 @@ Connection = RunService.RenderStepped:Connect(function()
 	--//
 
 	if (Configuration.FOVCircle) then
+		local mouseLocation = UserInputService:GetMouseLocation()
+
+		--//
+
 		Configuration.AssistCircle.Color = (Configuration.AssistCircleColor or PinkieColor)
 
 		Configuration.AssistCircle.Radius = (Configuration.AssistFOV or 1)
 		Configuration.AssistCircle.Thickness = 1
 		Configuration.AssistCircle.Filled = false
 		Configuration.AssistCircle.NumSides = 60
-		Configuration.AssistCircle.Position = Vector2(Mouse.X, Mouse.Y)
+		Configuration.AssistCircle.Position = Vector2(mouseLocation.X, mouseLocation.Y)
 
 		--//
 
@@ -341,7 +346,7 @@ Connection = RunService.RenderStepped:Connect(function()
 		Configuration.SilentCircle.Thickness = 1
 		Configuration.SilentCircle.Filled = false
 		Configuration.SilentCircle.NumSides = 60
-		Configuration.SilentCircle.Position = Vector2(Mouse.X, Mouse.Y)
+		Configuration.SilentCircle.Position = Vector2(mouseLocation.X, mouseLocation.Y)
 	end
 
 	--//
