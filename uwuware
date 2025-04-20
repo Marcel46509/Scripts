@@ -63,8 +63,8 @@ xpcall(function()
 	Configuration.AssistCircle.Color = PinkieColor
 	Configuration.SilentCircle.Color = PinkieColor
 
-	Configuration.AssistCircle.Transparency = 0.7
-	Configuration.SilentCircle.Transparency = 0.7
+	Configuration.AssistCircle.Transparency = 0.5
+	Configuration.SilentCircle.Transparency = 0.5
 end, warn)
 
 --//
@@ -88,11 +88,11 @@ local Legit = Window:CreateTab("Legit")
 local Aimbot = Legit:CreateSector("Aimbot", "Left")
 
 Aimbot:AddToggle("Enabled", false, function(Toggle : boolean)
-
+	Configuration.SilentAim = Toggle
 end)
 
 Aimbot:AddToggle("Aim Assist", false, function(Toggle : boolean)
-
+	Configuration.AssistAim = Toggle
 end)
 
 Aimbot:AddToggle("Visible Only", false, function(Toggle : boolean)
@@ -242,9 +242,6 @@ end)
 
 local FOVCircle = Local:AddToggle("FOV Circle", false, function(Toggle : boolean)
 	Configuration.FOVCircle = Toggle
-
-	Configuration.AssistCircle.Visible = Configuration.FOVCircle
-	Configuration.SilentCircle.Visible = Configuration.FOVCircle
 end)
 
 FOVCircle:AddColorpicker(PinkieColor, function(Color : Color3)
@@ -330,23 +327,28 @@ Connection = RunService.RenderStepped:Connect(function()
 
 		--//
 
+		Configuration.AssistCircle.Visible = Configuration.AssistAim
 		Configuration.AssistCircle.Color = (Configuration.AssistCircleColor or PinkieColor)
 
 		Configuration.AssistCircle.Radius = (Configuration.AssistFOV or 1)
 		Configuration.AssistCircle.Thickness = 1
 		Configuration.AssistCircle.Filled = false
 		Configuration.AssistCircle.NumSides = 60
-		Configuration.AssistCircle.Position = Vector2(mouseLocation.X, mouseLocation.Y)
+		Configuration.AssistCircle.Position = Vector2.new(mouseLocation.X, mouseLocation.Y)
 
 		--//
 
+		Configuration.SilentCircle.Visible = Configuration.SilentAim
 		Configuration.SilentCircle.Color = (Configuration.SilentCircleColor or PinkieColor)
 
 		Configuration.SilentCircle.Radius = (Configuration.SilentFOV or 1)
 		Configuration.SilentCircle.Thickness = 1
 		Configuration.SilentCircle.Filled = false
 		Configuration.SilentCircle.NumSides = 60
-		Configuration.SilentCircle.Position = Vector2(mouseLocation.X, mouseLocation.Y)
+		Configuration.SilentCircle.Position = Vector2.new(mouseLocation.X, mouseLocation.Y)
+	else
+		Configuration.AssistCircle.Visible = false
+		Configuration.SilentCircle.Visible = false
 	end
 
 	--//
