@@ -1,5 +1,4 @@
-# Scripts
-Roblox LUAU Scripts
+# Roblox Scripts
 
-All the scripts have been written by me, or they have been modified very much.
-Enjoy ^_^
+This is a place where I post random scripts that I've made or modified.
+Enjoy ^⩊^
