@@ -173,9 +173,21 @@ Aimbot:AddDropdown("Hitboxes", {"Head", "Body", "Arms", "Legs"}, nil, true, func
 	Configuration.Hitboxes = selected
 end)
 
+local LegitOther = Legit:CreateSector("Other", "Right")
+
+LegitOther:AddToggle("Triggerbot", false, function(toggle : boolean)
+	Configuration.Triggerbot = toggle
+end)
+
+LegitOther:AddSlider("Triggerbot Delay [ms]", 0, 0, 1000, 1, function(value : number)
+	Configuration.TriggerbotDelay = (value / 1000)
+end)
+
 --//
 
 local Rage = Window:CreateTab("Rage")
+
+local RageBot = Rage:CreateSector("Ragebot", "Left")
 
 local RageOther = Rage:CreateSector("Other", "Right")
 
@@ -187,13 +199,7 @@ RageOther:AddToggle("Fake Duck", false, function(toggle : boolean)
     Configuration.FakeDuck = toggle
 end):AddKeybind(Enum.KeyCode.Y, "FakeDuck")
 
-RageOther:AddToggle("Triggerbot", false, function(toggle : boolean)
-	Configuration.Triggerbot = toggle
-end)
-
-RageOther:AddSlider("Triggerbot Delay [ms]", 0, 0, 1000, 1, function(value : number)
-	Configuration.TriggerbotDelay = (value / 1000)
-end)
+local AntiAim = Rage:CreateSector("Anti-Aim", "Left")
 
 --//
 
@@ -324,12 +330,28 @@ end)
 
 local VisualsMisc = Visuals:CreateSector("Misc", "Left")
 
+VisualsMisc:AddToggle("Bullet Tracers", false, function(toggle : boolean)
+	Configuration.BulletTracers = toggle
+end):AddColorpicker(Configuration.Color, function(color : Color3)
+	Configuration.BulletTracerColor = color
+end)
+
+VisualsMisc:AddToggle("Hit Chams", false, function(toggle : boolean)
+	Configuration.HitChams = toggle
+end):AddColorpicker(Configuration.Color, function(color : Color3)
+	Configuration.HitChamColor = color
+end)
+
 VisualsMisc:AddToggle("Third Person", false, function(toggle : boolean)
     Configuration.ThirdPerson = toggle
 end):AddKeybind(Enum.KeyCode.X)
 
 VisualsMisc:AddSlider("Third Person Distance", 0, 5, 128, 1, function(value : number)
     Configuration.ThirdPersonDistance = value
+end)
+
+VisualsMisc:AddDropdown("Tracer Type", {}, "Part", false, function(selected : string)
+	Configuration.BulletTracerType = selected
 end)
 
 local World = Visuals:CreateSector("World", "Right")
