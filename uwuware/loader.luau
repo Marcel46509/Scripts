@@ -5,7 +5,7 @@ local success : boolean, mainuwu : string | any = pcall(function()
     return game:HttpGet(`{gamesURL.. game.GameId}.luau`)
 end)
 
-if ((not success) or (mainUwu == "404: Not Found")) then
+if ((not success) or (mainuwu == "404: Not Found")) then
     StarterGui:SetCore("SendNotification", {
         Title = "uwuware",
         Text = "Loading universal script..."
