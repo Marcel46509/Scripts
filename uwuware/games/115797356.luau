@@ -375,23 +375,23 @@ local Viewmodel = Visuals:CreateSector("Viewmodel", "Right")
 
 Viewmodel:AddToggle("Enabled", false, function(toggle : boolean)
     Configuration.Viewmodel_Enabled = toggle
-end)
+end, "ViewmodelEnabled")
 
 Viewmodel:AddSlider("X", 0, 180, 360, 1, function(value : number)
     Configuration.Viewmodel_X = value
-end)
+end, "ViewmodelX")
 
 Viewmodel:AddSlider("Y", 0, 180, 360, 1, function(value : number)
     Configuration.Viewmodel_Y = value
-end)
+end, "ViewmodelY")
 
 Viewmodel:AddSlider("Z", 0, 180, 360, 1, function(value : number)
     Configuration.Viewmodel_Z = value
-end)
+end, "ViewmodelZ")
 
 Viewmodel:AddSlider("Roll", 0, 180, 360, 1, function(value : number)
     Configuration.Viewmodel_Roll = value
-end)
+end, "ViewmodelRoll")
 
 --//
 
