@@ -12,6 +12,19 @@ local CurrentCamera = workspace.CurrentCamera
 
 local Library, ESPLibrary, Window, Watermark, Configuration = loadstring(game:HttpGet('https://raw.githubusercontent.com/Marcel46509/Scripts/refs/heads/main/uwuware/ui.luau'))()
 
+local Sounds = {
+	[workspace.Sounds.Arm] = "Arm",
+	[workspace.Sounds.Becky] = "Becky",
+	[workspace.Sounds.Beep] = "Beep",
+	[workspace.Sounds.CT] = "CT",
+	[workspace.Sounds.T] = "T",
+	[workspace.Sounds.Defuse] = "Defuse",
+	[workspace.Sounds.Rescue] = "Rescue",
+	[workspace.Sounds.Explosion] = "Explosion",
+	[workspace.RoundEnd] = "RoundEnd",
+	[workspace.RoundStart] = "RoundStart"
+}
+
 --//Functions
 
 local function IsVisible(Position : Vector3, IgnoreList : {any})
@@ -358,7 +371,7 @@ World:AddToggle("Remove Shadows", false, function(toggle : boolean)
 	Lighting.GlobalShadows = (not toggle)
 end)
 
-local Viewmodel = Visuals:CreateSector("Viewmodel")
+local Viewmodel = Visuals:CreateSector("Viewmodel", "Right")
 
 Viewmodel:AddToggle("Enabled", false, function(toggle : boolean)
     Configuration.Viewmodel_Enabled = toggle
@@ -448,7 +461,16 @@ Configuration.Team = MiscPlayers:AddLabel("Team: ")
 Configuration.Alive = MiscPlayers:AddLabel("Alive: ")
 Configuration.Age = MiscPlayers:AddLabel("Account Age: ")
 
-local Funny = Misc:CreateSector("Funny")
+local Funny = Misc:CreateSector("Funny", "Left")
+
+Funny:AddDropdown("Play Sound", Sounds, "sound", false, function(selected : string)
+	for sound : Sound, name : string in next, Sounds do
+		if (name == selected) then
+			sound:Play()
+			break
+		end
+	end
+end)
 
 --//
 
@@ -500,7 +522,7 @@ ExploitsMain:AddToggle("Fake Lag", false, function(toggle : boolean)
 end)
 --]]
 
-local GunMods = Exploits:CreateSector("Gun Mods")
+local GunMods = Exploits:CreateSector("Gun Mods", "Right")
 
 --[[
 GunMods:AddToggle("Damage Modifier", false, function(toggle : boolean)
@@ -522,9 +544,9 @@ end):AddSlider(0, 1, 100, 1, function(value : number)
     Configuration.MinimumDamageValue = value
 end)
 
-local ExploitsOther = Exploits:CreateSector("Other")
+local ExploitsOther = Exploits:CreateSector("Other", "Right")
 
-ExploitsOther:AddKeybind("Mouse Target Remove", false, nil, function()
+ExploitsOther:AddKeybind("Mouse Target Remove", Enum.KeyCode.J, nil, function()
     if (Mouse.Target) then
         Mouse.Target:Destroy()
     end
