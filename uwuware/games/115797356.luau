@@ -512,6 +512,7 @@ end)
 
 ExploitsMain:AddToggle("Lag Spectators", false, function(toggle : boolean)
     Configuration.LagSpectators = toggle
+	Configuration.SpectatorTick = (tick() - 10)
 end):AddSlider(0, 5, 10, 1, function(value : number)
     Configuration.SpectatorDelay = value
 end)
@@ -576,6 +577,14 @@ connection = RunService.RenderStepped:Connect(function()
 
 	if (Configuration["TimeChanger"]) then
 		Lighting.ClockTime = Configuration.Time
+	end
+
+	--//
+
+	if (Configuration["LagSpectators"]) then
+		if ((tick() - Configuration.SpectatorTick) >= Configuration.SpectatorDelay) then
+			Configuration.SpectatorCFrame = CurrentCamera.CFrame
+		end
 	end
 
 	--//
@@ -658,7 +667,9 @@ pcall(function()
             if (method == "Kick") then
                 return
             elseif (method == "FireServer") then
-
+				if ((self.Name == "ReplicateCameraUDP") and (Configuration["LagSpectators"])) then
+					args[1] = Configuration.SpectatorCFrame
+				end
             elseif ((method == "SetPrimaryPartCFrame") and (Configuration.Viewmodel_Enabled) and (self.Name == "Arms")) then
                 args[1] *= CFrame.new(Vector3.new(math.rad(Configuration.Viewmodel_X - 180), math.rad(Configuration.Viewmodel_Y - 180), math.rad(Configuration.Viewmodel_Z - 180))) * CFrame.Angles(0, 0, math.rad(Configuration.Viewmodel_Roll - 180))
             end
