@@ -55,8 +55,8 @@ Configuration.Color = PinkieColor
 local Scripts = Window:CreateTab("Scripts")
 local ScriptsMain = Scripts:CreateSector("Scripts", "Left")
 
-ScriptsMain:AddDropdown("Script", RunScripts, "script", false, function(Selected : string)
-	Configuration.SelectedScript = Selected
+ScriptsMain:AddDropdown("Script", RunScripts, "script", false, function(selected : string)
+	Configuration.SelectedScript = selected
 end)
 
 ScriptsMain:AddButton("Run Script", function()
@@ -78,15 +78,15 @@ Menu:AddKeybind("Open / Close", Library.hidebutton, function(newBind : boolean)
     Library.hidebutton = newBind
 end)
 
-Menu:AddColorpicker("Theme Color", PinkieColor, function(Color : Color3)
-	Theme.accentcolor = Color
+Menu:AddColorpicker("Theme Color", PinkieColor, function(color : Color3)
+	Theme.accentcolor = color
 
 	Window:UpdateTheme(Theme)
 	Watermark:UpdateTheme(Theme)
 end)
 
-Menu:AddToggle("Watermark", true, function(Toggle : boolean)
-	Watermark.Visible = Toggle
+Menu:AddToggle("Watermark", true, function(toggle : boolean)
+	Watermark.Visible = toggle
 end)
 
 xpcall(function()
