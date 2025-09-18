@@ -52,51 +52,48 @@ Configuration.Color = PinkieColor
 
 --//
 
-task.delay(1.2, function()
+task.delay(1, function()
+	local Scripts = Window:CreateTab("Scripts")
+	local ScriptsMain = Scripts:CreateSector("Scripts", "Left")
 
-local Scripts = Window:CreateTab("Scripts")
-local ScriptsMain = Scripts:CreateSector("Scripts", "Left")
+	ScriptsMain:AddDropdown("Script", RunScripts, "script", false, function(selected : string)
+		Configuration.SelectedScript = selected
+	end)
 
-ScriptsMain:AddDropdown("Script", RunScripts, "script", false, function(selected : string)
-	Configuration.SelectedScript = selected
-end)
-
-ScriptsMain:AddButton("Run Script", function()
-	for load : string, name : string in next, RunScripts do
-		if (name == Configuration.SelectedScript) then
-			loadstring(game:HttpGet(load))()
-			break
+	ScriptsMain:AddButton("Run Script", function()
+		for load : string, name : string in next, RunScripts do
+			if (name == Configuration.SelectedScript) then
+				loadstring(game:HttpGet(load))()
+				break
+			end
 		end
-	end
-end)
+	end)
 
---//
+	--//
 
-local Settings = Window:CreateTab("Settings")
+	local Settings = Window:CreateTab("Settings")
+	local Menu = Settings:CreateSector("Menu", "Left")
 
-local Menu = Settings:CreateSector("Menu", "Left")
+	Menu:AddKeybind("Open / Close", Library.hidebutton, function(newBind : boolean)
+	    Library.hidebutton = newBind
+	end)
 
-Menu:AddKeybind("Open / Close", Library.hidebutton, function(newBind : boolean)
-    Library.hidebutton = newBind
-end)
+	Menu:AddColorpicker("Theme Color", PinkieColor, function(color : Color3)
+		Theme.accentcolor = color
 
-Menu:AddColorpicker("Theme Color", PinkieColor, function(color : Color3)
-	Theme.accentcolor = color
+		Window:UpdateTheme(Theme)
+		Watermark:UpdateTheme(Theme)
+	end)
 
-	Window:UpdateTheme(Theme)
-	Watermark:UpdateTheme(Theme)
-end)
+	Menu:AddToggle("Watermark", true, function(toggle : boolean)
+		Watermark.Visible = toggle
+	end)
 
-Menu:AddToggle("Watermark", true, function(toggle : boolean)
-	Watermark.Visible = toggle
-end)
-
-xpcall(function()
-	Settings:CreateConfigSystem("Right")
-end, warn)
-
+	xpcall(function()
+		Settings:CreateConfigSystem("Right")
+	end, warn)
 end)
 
 --//End
 
-return Library, ESPLibrary, Window, Watermark, Configuration, Settings
+return Library, ESPLibrary, Window, Watermark, Configuration
