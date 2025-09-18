@@ -679,7 +679,10 @@ end)
 --//
 
 pcall(function()
-    local oldNamecall; oldNamecall = hookmetamethod(game, "__namecall", function(self, ...)
+    local mt = getrawmetatable(game)
+    local oldNamecall = mt.__namecall
+
+    mt.__namecall = newcclosure(function(self, ...)
         local method = getnamecallmethod()
         local callingscript = getcallingscript()
 
@@ -692,7 +695,7 @@ pcall(function()
 				if ((self.Name == "ReplicateCameraUDP") and (Configuration["LagSpectators"])) then
 					args[1] = Configuration.SpectatorCFrame
 				end
-            elseif ((method == "SetPrimaryPartCFrame") and (Configuration.Viewmodel_Enabled) and (self.Name == "Arms")) then
+            elseif ((method == "SetPivot") and (Configuration.Viewmodel_Enabled) and (self.Name == "Arms")) then
                 args[1] *= CFrame.new(Vector3.new(math.rad(Configuration.Viewmodel_X - 180), math.rad(Configuration.Viewmodel_Y - 180), math.rad(Configuration.Viewmodel_Z - 180))) * CFrame.Angles(0, 0, math.rad(Configuration.Viewmodel_Roll - 180))
             end
         end
