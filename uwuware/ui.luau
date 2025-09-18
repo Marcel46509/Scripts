@@ -52,6 +52,8 @@ Configuration.Color = PinkieColor
 
 --//
 
+task.delay(1.2, function()
+
 local Scripts = Window:CreateTab("Scripts")
 local ScriptsMain = Scripts:CreateSector("Scripts", "Left")
 
@@ -92,6 +94,8 @@ end)
 xpcall(function()
 	Settings:CreateConfigSystem("Right")
 end, warn)
+
+end)
 
 --//End
 
