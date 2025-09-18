@@ -74,8 +74,8 @@ task.delay(1, function()
 	local Settings = Window:CreateTab("Settings")
 	local Menu = Settings:CreateSector("Menu", "Left")
 
-	Menu:AddKeybind("Open / Close", Library.hidebutton, function(newBind : boolean)
-	    Library.hidebutton = newBind
+	Menu:AddKeybind("Open / Close", Window.hidebutton, function(newBind : boolean)
+	    Window.hidebutton = newBind
 	end)
 
 	Menu:AddColorpicker("Theme Color", PinkieColor, function(color : Color3)
