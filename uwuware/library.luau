@@ -3,7 +3,8 @@
 
 local library = {
 	flags = { },
-	items = { }
+	items = { },
+	updateFunctions = { }
 }
 
 -- Services
@@ -53,6 +54,12 @@ library.theme = {
 	itemscolor2 = Color3.fromRGB(210, 210, 210)
 }
 
+runservice.RenderStepped:Connect(function()
+	for _, func : any in next, library.updateFunctions do
+		pcall(func)
+	end
+end)
+
 if library.theme.cursor and Drawing then
 	local success = pcall(function()
 		library.cursor = Drawing.new("Image")
@@ -71,7 +78,7 @@ if library.theme.cursor and Drawing then
 			end
 		end)
 
-		game:GetService("RunService").RenderStepped:Connect(function()
+		table.insert(library.updateFunctions, function()
 			uis.OverrideMouseIconBehavior = Enum.OverrideMouseIconBehavior.ForceHide
 			library.cursor.Visible = uis.MouseEnabled and (uis.MouseIconEnabled or game:GetService("GuiService").MenuIsOpen)
 		end)
@@ -308,11 +315,13 @@ function library:CreateWindow(name, size, hidebutton)
 
 	local function checkIfGuiInFront(Pos)
 		local objects = coregui:GetGuiObjectsAtPosition(Pos.X, Pos.Y)
+
 		for i,v in pairs(objects) do
 			if not string.find(v:GetFullName(), window.name) then
 				table.remove(objects, i)
 			end
 		end
+
 		return (#objects ~= 0 and objects[1].AbsolutePosition ~= Pos)
 	end
 
@@ -1262,7 +1271,7 @@ function library:CreateWindow(name, size, hidebutton)
 							return
 						end)
 
-						runservice.RenderStepped:Connect(function()
+						table.insert(library.updateFunctions, function()
 							if dropdown.multichoice and dropdown:isSelected(v) or dropdown.values[1] == v then
 								Item.BackgroundColor3 = Color3.fromRGB(64, 64, 64)
 								Item.TextColor3 = window.theme.accentcolor
@@ -2701,7 +2710,7 @@ function library:CreateWindow(name, size, hidebutton)
 							return
 						end)
 
-						runservice.RenderStepped:Connect(function()
+						table.insert(library.updateFunctions, function()
 							if dropdown.multichoice and dropdown:isSelected(v) or dropdown.values[1] == v then
 								Item.BackgroundColor3 = Color3.fromRGB(64, 64, 64)
 								Item.TextColor3 = window.theme.accentcolor
@@ -3251,7 +3260,7 @@ function library:CreateWindow(name, size, hidebutton)
 						return
 					end)
 
-					runservice.RenderStepped:Connect(function()
+					table.insert(library.updateFunctions, function()
 						if dropdown.multichoice and dropdown:isSelected(v) or dropdown.values[1] == v then
 							Item.BackgroundColor3 = Color3.fromRGB(64, 64, 64)
 							Item.TextColor3 = window.theme.accentcolor
