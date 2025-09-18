@@ -1,6 +1,6 @@
 --//Locals
 local Library = loadstring(game:HttpGet('https://raw.githubusercontent.com/Marcel46509/Scripts/refs/heads/main/uwuware/library.luau'))()
-local ESPLibrary = loadstring(game:HttpGet('https://raw.githubusercontent.com/Marcel46509/Scripts/refs/heads/main/v3_esp.luau'))()
+local ESPLibrary = loadstring(game:HttpGet('https://raw.githubusercontent.com/Marcel46509/Scripts/refs/heads/main/uwuware/espLibrary.luau'))()
 
 local Window = Library:CreateWindow("uwuware", Vector2.new(450, 552), Enum.KeyCode.Insert)
 local Watermark = Library:CreateWatermark("uwuware | {fps}", Vector2.new(1400, -48))
