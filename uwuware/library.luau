@@ -1,9 +1,9 @@
 --> Cattoware
 -- insert troll face, memcorruptv2
 
-local library = { 
-	flags = { }, 
-	items = { } 
+local library = {
+	flags = { },
+	items = { }
 }
 
 -- Services
@@ -12,7 +12,6 @@ local uis = game:GetService("UserInputService")
 local runservice = game:GetService("RunService")
 local tweenservice = game:GetService("TweenService")
 local marketplaceservice = game:GetService("MarketplaceService")
-local textservice = game:GetService("TextService")
 local coregui = game:GetService("CoreGui")
 local httpservice = game:GetService("HttpService")
 
@@ -55,7 +54,7 @@ library.theme = {
 }
 
 if library.theme.cursor and Drawing then
-	local success = pcall(function() 
+	local success = pcall(function()
 		library.cursor = Drawing.new("Image")
 		library.cursor.Data = game:HttpGet(library.theme.cursorimg)
 		library.cursor.Size = Vector2.new(64, 64)
@@ -84,15 +83,15 @@ end
 function library:CreateWatermark(name, position)
 	local gamename = marketplaceservice:GetProductInfo(game.PlaceId).Name
 	local watermark = { }
-	
+
 	watermark.Visible = true
 	watermark.text = " " .. name:gsub("{game}", gamename):gsub("{fps}", "0 FPS") .. " "
 
 	watermark.main = Instance.new("ScreenGui")
 	watermark.main.Name = "Watermark"
-	
+
 	safeParent(watermark.main)
-	
+
 	if syn then
 		syn.protect_gui(watermark.main)
 	end
@@ -160,7 +159,7 @@ function library:CreateWatermark(name, position)
 	watermark.Outline.Size = watermark.mainbar.Size + UDim2.fromOffset(2, 2)
 	watermark.BlackOutline.Size = watermark.mainbar.Size + UDim2.fromOffset(4, 4)
 
-	watermark.mainbar.Size = UDim2.new(0, watermark.label.TextBounds.X+4, 0, 25)    
+	watermark.mainbar.Size = UDim2.new(0, watermark.label.TextBounds.X+4, 0, 25)
 	watermark.label.Size = UDim2.new(0, watermark.label.TextBounds.X+4, 0, 25)
 	watermark.topbar.Size = UDim2.new(0, watermark.label.TextBounds.X+6, 0, 1)
 	watermark.Outline.Size = watermark.mainbar.Size + UDim2.fromOffset(2, 2)
@@ -181,7 +180,7 @@ function library:CreateWatermark(name, position)
 		if name:find("{fps}") then
 			local currentTime = os.clock()
 			counter = counter + 1
-			if currentTime - startTime >= 1 then 
+			if currentTime - startTime >= 1 then
 				local fps = math.floor(counter / (currentTime - startTime))
 				counter = 0
 				startTime = currentTime
@@ -245,18 +244,18 @@ function library:CreateWindow(name, size, hidebutton)
 	window.Main = Instance.new("ScreenGui")
 	window.Main.Name = name
 	window.Main.DisplayOrder = 15
-	
+
 	safeParent(window.Main)
-	
+
 	if syn then
 		syn.protect_gui(window.Main)
 	end
-	
+
 	xpcall(function()
 		if getgenv().uilib then
 			getgenv().uilib:Remove()
 		end
-		
+
 		getgenv().uilib = window.Main
 	end, warn)
 
@@ -309,10 +308,10 @@ function library:CreateWindow(name, size, hidebutton)
 
 	local function checkIfGuiInFront(Pos)
 		local objects = coregui:GetGuiObjectsAtPosition(Pos.X, Pos.Y)
-		for i,v in pairs(objects) do 
-			if not string.find(v:GetFullName(), window.name) then 
+		for i,v in pairs(objects) do
+			if not string.find(v:GetFullName(), window.name) then
 				table.remove(objects, i)
-			end 
+			end
 		end
 		return (#objects ~= 0 and objects[1].AbsolutePosition ~= Pos)
 	end
@@ -424,7 +423,7 @@ function library:CreateWindow(name, size, hidebutton)
 	window.BackgroundImage.Size = UDim2.fromOffset(window.size.X.Offset, window.size.Y.Offset - window.TopBar.AbsoluteSize.Y - 1)
 	window.BackgroundImage.Image = window.theme.background or ""
 	window.BackgroundImage.ImageTransparency = window.BackgroundImage.Image ~= "" and 0 or 1
-	window.BackgroundImage.ImageColor3 = Color3.new() 
+	window.BackgroundImage.ImageColor3 = Color3.new()
 	window.BackgroundImage.BackgroundColor3 = window.theme.backgroundcolor
 	window.BackgroundImage.TileSize = UDim2.new(0, window.theme.tilesize, 0, window.theme.tilesize)
 	updateevent.Event:Connect(function(theme)
@@ -477,7 +476,7 @@ function library:CreateWindow(name, size, hidebutton)
 			tab.TabButton.TextSize = theme.fontsize
 		end)
 
-		tab.Left = Instance.new("ScrollingFrame", window.Frame) 
+		tab.Left = Instance.new("ScrollingFrame", window.Frame)
 		tab.Left.Name = "leftside"
 		tab.Left.BorderSizePixel = 0
 		tab.Left.Size = UDim2.fromOffset(window.size.X.Offset / 2, window.size.Y.Offset - (window.TopBar.AbsoluteSize.Y + 1))
@@ -497,7 +496,7 @@ function library:CreateWindow(name, size, hidebutton)
 		tab.LeftListPadding.PaddingLeft = UDim.new(0, 12)
 		tab.LeftListPadding.PaddingRight = UDim.new(0, 12)
 
-		tab.Right = Instance.new("ScrollingFrame", window.Frame) 
+		tab.Right = Instance.new("ScrollingFrame", window.Frame)
 		tab.Right.Name = "rightside"
 		tab.Right.ScrollBarThickness = 0
 		tab.Right.ScrollingDirection = "Y"
@@ -519,7 +518,7 @@ function library:CreateWindow(name, size, hidebutton)
 
 		local block = false
 		function tab:SelectTab()
-			repeat 
+			repeat
 				wait()
 			until block == false
 
@@ -558,7 +557,7 @@ function library:CreateWindow(name, size, hidebutton)
 			sector.name = name or ""
 			sector.side = side:lower() or "left"
 
-			sector.Main = Instance.new("Frame", sector.side == "left" and tab.Left or tab.Right) 
+			sector.Main = Instance.new("Frame", sector.side == "left" and tab.Left or tab.Right)
 			sector.Main.Name = sector.name:gsub(" ", "") .. "Sector"
 			sector.Main.BorderSizePixel = 0
 			sector.Main.ZIndex = 4
@@ -650,7 +649,7 @@ function library:CreateWindow(name, size, hidebutton)
 			sector.LabelBackFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 			sector.LabelBackFrame.Position = UDim2.fromOffset(sector.Label.Position.X.Offset, sector.BlackOutline2.Position.Y.Offset)
 
-			sector.Items = Instance.new("Frame", sector.Main) 
+			sector.Items = Instance.new("Frame", sector.Main)
 			sector.Items.Name = "items"
 			sector.Items.ZIndex = 2
 			sector.Items.BackgroundTransparency = 1
@@ -909,7 +908,7 @@ function library:CreateWindow(name, size, hidebutton)
 					library.flags[toggle.flag] = toggle.default or false
 				end
 
-				function toggle:Set(value) 
+				function toggle:Set(value)
 					if value then
 						toggle.Label.TextColor3 = window.theme.itemscolor2
 					else
@@ -923,7 +922,7 @@ function library:CreateWindow(name, size, hidebutton)
 					end
 					pcall(toggle.callback, value)
 				end
-				function toggle:Get() 
+				function toggle:Get()
 					return toggle.value
 				end
 				toggle:Set(toggle.default)
@@ -1059,7 +1058,7 @@ function library:CreateWindow(name, size, hidebutton)
 					dropdown.SelectedLabel.TextXAlignment = Enum.TextXAlignment.Left
 					updateevent.Event:Connect(function(theme)
 						dropdown.SelectedLabel.Font = theme.font
-					end)  
+					end)
 
 					dropdown.Nav = Instance.new("ImageButton", dropdown.Main)
 					dropdown.Nav.Name = "navigation"
@@ -1304,7 +1303,7 @@ function library:CreateWindow(name, size, hidebutton)
 
 							item:Remove()
 						end
-					end 
+					end
 
 					for i,v in pairs(dropdown.defaultitems) do
 						dropdown:Add(v)
@@ -1412,7 +1411,7 @@ function library:CreateWindow(name, size, hidebutton)
 						return textbox.value
 					end
 
-					if textbox.default then 
+					if textbox.default then
 						textbox:Set(textbox.default)
 					end
 
@@ -1610,13 +1609,13 @@ function library:CreateWindow(name, size, hidebutton)
 					end)
 
 					colorpicker.gradient = Instance.new("UIGradient", colorpicker.selector)
-					colorpicker.gradient.Color = ColorSequence.new({ 
-						ColorSequenceKeypoint.new(0, Color3.new(1,0,0)), 
-						ColorSequenceKeypoint.new(0.17, Color3.new(1,0,1)), 
-						ColorSequenceKeypoint.new(0.33,Color3.new(0,0,1)), 
-						ColorSequenceKeypoint.new(0.5,Color3.new(0,1,1)), 
-						ColorSequenceKeypoint.new(0.67, Color3.new(0,1,0)), 
-						ColorSequenceKeypoint.new(0.83, Color3.new(1,1,0)), 
+					colorpicker.gradient.Color = ColorSequence.new({
+						ColorSequenceKeypoint.new(0, Color3.new(1,0,0)),
+						ColorSequenceKeypoint.new(0.17, Color3.new(1,0,1)),
+						ColorSequenceKeypoint.new(0.33,Color3.new(0,0,1)),
+						ColorSequenceKeypoint.new(0.5,Color3.new(0,1,1)),
+						ColorSequenceKeypoint.new(0.67, Color3.new(0,1,0)),
+						ColorSequenceKeypoint.new(0.83, Color3.new(1,1,0)),
 						ColorSequenceKeypoint.new(1, Color3.new(1,0,0))
 					})
 
@@ -1994,7 +1993,7 @@ function library:CreateWindow(name, size, hidebutton)
 					return textbox.value
 				end
 
-				if textbox.default then 
+				if textbox.default then
 					textbox:Set(textbox.default)
 				end
 
@@ -2192,8 +2191,8 @@ function library:CreateWindow(name, size, hidebutton)
 				slider:Set(slider.default)
 
 				slider.InputLabel.FocusLost:Connect(function(Return)
-					if not Return then 
-						return 
+					if not Return then
+						return
 					end
 					if (slider.InputLabel.Text:match("^%d+$")) then
 						slider:Set(tonumber(slider.InputLabel.Text))
@@ -2404,13 +2403,13 @@ function library:CreateWindow(name, size, hidebutton)
 				end)
 
 				colorpicker.gradient = Instance.new("UIGradient", colorpicker.selector)
-				colorpicker.gradient.Color = ColorSequence.new({ 
-					ColorSequenceKeypoint.new(0, Color3.new(1,0,0)), 
-					ColorSequenceKeypoint.new(0.17, Color3.new(1,0,1)), 
-					ColorSequenceKeypoint.new(0.33,Color3.new(0,0,1)), 
-					ColorSequenceKeypoint.new(0.5,Color3.new(0,1,1)), 
-					ColorSequenceKeypoint.new(0.67, Color3.new(0,1,0)), 
-					ColorSequenceKeypoint.new(0.83, Color3.new(1,1,0)), 
+				colorpicker.gradient.Color = ColorSequence.new({
+					ColorSequenceKeypoint.new(0, Color3.new(1,0,0)),
+					ColorSequenceKeypoint.new(0.17, Color3.new(1,0,1)),
+					ColorSequenceKeypoint.new(0.33,Color3.new(0,0,1)),
+					ColorSequenceKeypoint.new(0.5,Color3.new(0,1,1)),
+					ColorSequenceKeypoint.new(0.67, Color3.new(0,1,0)),
+					ColorSequenceKeypoint.new(0.83, Color3.new(1,1,0)),
 					ColorSequenceKeypoint.new(1, Color3.new(1,0,0))
 				})
 
@@ -2743,7 +2742,7 @@ function library:CreateWindow(name, size, hidebutton)
 
 							item:Remove()
 						end
-					end 
+					end
 
 					for i,v in pairs(dropdown.defaultitems) do
 						dropdown:Add(v)
@@ -3293,7 +3292,7 @@ function library:CreateWindow(name, size, hidebutton)
 
 						item:Remove()
 					end
-				end 
+				end
 
 				for i,v in pairs(dropdown.defaultitems) do
 					dropdown:Add(v)
@@ -3421,7 +3420,7 @@ function library:CreateWindow(name, size, hidebutton)
 			local configSystem = { }
 
 			configSystem.configFolder = window.name .. "/" .. tostring(game.PlaceId)
-			
+
 			if (not isfolder(configSystem.configFolder)) then
 				makefolder(configSystem.configFolder)
 			end
@@ -3431,7 +3430,7 @@ function library:CreateWindow(name, size, hidebutton)
 			local ConfigName = configSystem.sector:AddTextbox("Config Name", "", ConfigName, function() end, "")
 			local default = tostring(listfiles(configSystem.configFolder)[1] or ""):gsub(configSystem.configFolder .. "\\", ""):gsub(".txt", "")
 			local Config = configSystem.sector:AddDropdown("Configs", {}, default, false, function() end, "")
-			
+
 			for i,v in pairs(listfiles(configSystem.configFolder)) do
 				if v:find(".txt") then
 					Config:Add(tostring(v):gsub(configSystem.configFolder .. "\\", ""):gsub(".txt", ""))
@@ -3494,7 +3493,7 @@ function library:CreateWindow(name, size, hidebutton)
 			configSystem.Load = configSystem.sector:AddButton("Load", function()
 				local Success = pcall(readfile, configSystem.configFolder .. "/" .. Config:Get() .. ".txt")
 				if (Success) then
-					pcall(function() 
+					pcall(function()
 						local ReadConfig = httpservice:JSONDecode(readfile(configSystem.configFolder .. "/" .. Config:Get() .. ".txt"))
 						local NewConfig = {}
 
@@ -3518,7 +3517,7 @@ function library:CreateWindow(name, size, hidebutton)
 							for i2,v2 in pairs(library.items) do
 								if (i ~= nil and i ~= "" and i ~= "Configs_Name" and i ~= "Configs" and v2.flag ~= nil) then
 									if (v2.flag == i) then
-										pcall(function() 
+										pcall(function()
 											v2:Set(v)
 										end)
 									end
@@ -3553,7 +3552,7 @@ function library:CreateWindow(name, size, hidebutton)
             local list = { }
             list.name = name or ""
 
-            list.Main = Instance.new("Frame", tab.TabPage) 
+            list.Main = Instance.new("Frame", tab.TabPage)
             list.Main.Name = list.name:gsub(" ", "") .. "Sector"
             list.Main.BorderColor3 = window.theme.outlinecolor
             list.Main.ZIndex = 2
@@ -3602,7 +3601,7 @@ function library:CreateWindow(name, size, hidebutton)
             list.LabelBackFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
             list.LabelBackFrame.Position = UDim2.fromOffset(0, 6)
 
-            list.Items = Instance.new("ScrollingFrame", list.Main) 
+            list.Items = Instance.new("ScrollingFrame", list.Main)
             list.Items.Name = "items"
             list.Items.ZIndex = 2
             list.Items.ScrollBarThickness = 1
@@ -3658,11 +3657,11 @@ function library:CreateWindow(name, size, hidebutton)
             for i,v in pairs(game:GetService("Players"):GetPlayers()) do
                 list:AddPlayer(v)
             end
-            
+
             game:GetService("Players").PlayerAdded:Connect(function(v)
                 list:AddPlayer(v)
             end)
-            
+
             return list
         end
         ]]--
