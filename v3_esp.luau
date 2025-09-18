@@ -1,9 +1,5 @@
 ---@vars
 
-if true then
-return {}
-end
-
 local RenderConnection
 
 local runService = game:GetService('RunService')
