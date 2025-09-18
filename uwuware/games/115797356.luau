@@ -6,11 +6,14 @@ local Lighting = game:GetService("Lighting")
 local PolicyService = game:GetService("PolicyService")
 
 local LocalPlayer = Players.LocalPlayer
-local Mouse = LocalPlayer:GetMouse()
+local PlayerGui = LocalPlayer.PlayerGui
 
+local Mouse = LocalPlayer:GetMouse()
 local CurrentCamera = workspace.CurrentCamera
 
 local Library, ESPLibrary, Window, Watermark, Configuration = loadstring(game:HttpGet('https://raw.githubusercontent.com/Marcel46509/Scripts/refs/heads/main/uwuware/ui.luau'))()
+
+local CBClient = getsenv(PlayerGui:WaitForChild("Client"))
 
 local Sounds = {
 	[workspace.Sounds.Arm] = "Arm",
@@ -23,6 +26,11 @@ local Sounds = {
 	[workspace.Sounds.Explosion] = "Explosion",
 	[workspace.RoundEnd] = "RoundEnd",
 	[workspace.RoundStart] = "RoundStart"
+}
+
+local IgnoredChamPartNames = {
+	"Right Arm", "Left Arm", "Joint", "Flash", "HumanoidRootPart", "StatClock", "Sleeve", "Glove",
+	"LGlove", "RGlove"
 }
 
 --//Functions
@@ -555,6 +563,16 @@ end)
 
 GunMods:AddToggle("Remove Recoil", false, function(toggle : boolean)
     Configuration.RemoveRecoil = toggle
+
+	if (toggle) then
+		RunService:BindToRenderStep("ERP", 100, function()
+			CBClient.resetaccuracy()
+			CBClient.RecoilX = 0
+			CBClient.RecoilY = 0
+		end)
+	else
+		RunService:UnbindFromRenderStep("ERP")
+	end
 end)
 
 GunMods:AddToggle("Remove Spread", false, function(toggle : boolean)
@@ -710,6 +728,71 @@ pcall(function()
 
         return oldNamecall(self, unpack(args))
     end)
+
+	getrawmetatable(PlayerGui.Client).__index = newcclosure(function(self, idx)
+		if idx == "Value" then
+			if ((self.Name == "Spread" or self.Parent.Name == "Spread") and (Configuration.RemoveSpread)) then
+				return 0
+			elseif ((self.Name == "EquipTime") and (Configuration.InstantEquip)) then
+				return 0.002
+			elseif ((self.Name == "ReloadTime") and (Configuration.InstantReload)) then
+				return 0.002
+			end
+		end
+
+		return oldIndex(self, idx)
+	end)
+
+	CurrentCamera.ChildAdded:Connect(function(object : Instance)
+		if ((object.Name:lower() == "arms") and (object:IsA("Model"))) then
+			local leftArm : BasePart = (object:FindFirstChild("Left Arm"))
+			local rightArm : BasePart = (object:FindFirstChild("Right Arm"))
+
+			if (Configuration.InfiniteAmmo) then
+				CBClient.ammocount = 2230 --> Rifle
+				CBClient.primarystored = 2115
+				CBClient.ammocount2 = 2230 --> Pistol
+				CBClient.secondarystored = 2115
+			end
+
+			if (Configuration.Viewmodel_Chams_Enabled) then
+				if (leftArm) then
+					leftArm.Color = Configuration.Viewmodel_Chams
+					leftArm.Material = Configuration.Viewmodel_Chams_Material
+
+					for _, part : BasePart in ipairs(leftArm:GetDescendants()) do
+						if (part:IsA("BasePart")) then
+							part.Color = Configuration.Viewmodel_Chams
+							part.Material = Configuration.Viewmodel_Chams_Material
+						end
+					end
+				end
+
+				if (rightArm) then
+					rightArm.Color = Configuration.Viewmodel_Chams
+					rightArm.Material = Configuration.Viewmodel_Chams_Material
+
+					for _, part : BasePart in ipairs(rightArm:GetDescendants()) do
+						if (part:IsA("BasePart")) then
+							part.Color = Configuration.Viewmodel_Chams
+							part.Material = Configuration.Viewmodel_Chams_Material
+						end
+					end
+				end
+			end
+
+			if (Configuration.Weapon_Chams_Enabled) then
+				for _, part : BasePart in ipairs(object:GetDescendants()) do
+					if (part:IsA("BasePart")) then
+						if (not table.find(IgnoredChamPartNames, part.Name)) then
+							part.Color = Configuration.Weapon_Chams
+							part.Material = Configuration.Weapon_Chams_Material
+						end
+					end
+				end
+			end
+		end
+	end)
 end)
 
 --//End
