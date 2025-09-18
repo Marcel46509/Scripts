@@ -168,7 +168,7 @@ end
 function esp.checkteam(plr : Player, bool) --> One and only team check thing
 	if (not plr) then plr = localPlayer end
 
-	return (((plr ~= localPlayer) and bool) or plr.TeamColor ~= localPlayer.TeamColor)
+	return (((plr ~= localPlayer) and bool) or plr.Team ~= localPlayer.Team)
 end
 
 function esp:checkvisible(instance, origin, params)
