@@ -642,6 +642,14 @@ connection = RunService.RenderStepped:Connect(function()
 
 	--//
 
+	if (ESPLibrary["enabled"]) then
+		xpcall(function()
+			ESPLibrary:update()
+		end, warn)
+	end
+
+	--//
+
 	if (Configuration["Triggerbot"]) then
         local player = ((Mouse.Target) and (Players:GetPlayerFromCharacter(Mouse.Target.Parent)))
 
