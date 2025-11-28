@@ -87,10 +87,16 @@ MainUICorner.CornerRadius = UDim.new(0, 4)
 MainUICorner.Parent = Main
 G2L["a"] = MainUICorner
 
--- Drag detector (keeps same behaviour as original)
+Main.Draggable = true
+Main.Selectable = true
+Main.Active = true
+
+--[[
+-- Drag detector (this shit doesn't work on rbx menu)
 local DragDetector = Instance.new("UIDragDetector")
 DragDetector.Parent = Main
 G2L["5"] = DragDetector
+--]]
 
 ----------------------------------------------------------------
 -- Title Label
@@ -566,7 +572,7 @@ local function toggleText(textLabel : TextLabel, toggle : boolean, textToggle : 
 	textLabel.Text = textLabel.Text.. tostring(toggle)
 end
 
-local function handleToggle(button : TextButton | ImageButton, textLabel : TextLabel, toggle : boolean?, textToggle : string?, textToggle2 : string?)
+local function handleToggle(button : TextButton | ImageButton, textLabel : TextLabel, toggle : boolean?, textToggle : string?, textToggle2 : string?, callBack : (toggle : boolean) -> ()?)
 	toggleText(textLabel, toggle, textToggle, textToggle2)
 
 	addConnection(button.MouseButton1Click:Connect(function()
@@ -574,6 +580,10 @@ local function handleToggle(button : TextButton | ImageButton, textLabel : TextL
 		toggleText(textLabel, toggle, textToggle, textToggle2)
 
 		options[textLabel.Name] = toggle
+		
+		if (callBack) then
+			callBack(toggle)
+		end
 	end))
 end
 
@@ -666,7 +676,11 @@ end))
 
 handleToggle(ESPToggle, ESP, options.esp)
 handleToggle(VisibleToggle, VisibleCheck, options.visibleCheck)
-handleToggle(ModeToggle, Mode, options.aimMode, "1 (Assist)", "2 (AimLock)")
+
+handleToggle(ModeToggle, Mode, options.aimMode, "1 (Assist)", "2 (AimLock)", function(toggle : boolean)
+	SmoothnessBox.Visible = toggle
+end)
+
 handleToggle(TeamToggle, TeamCheck, options.teamCheck)
 
 handleNumber(SmoothBoxBox)
