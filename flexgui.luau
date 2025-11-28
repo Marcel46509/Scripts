@@ -23,6 +23,11 @@ if (not RunService:IsStudio()) then
 	else
 		parentChildren = gethui()
 	end
+	
+	if (not writefile) then
+		LocalPlayer:Kick("Exploit not supported, writefile()!")
+		return
+	end
 end
 
 local connections = {}
@@ -36,7 +41,8 @@ local options = {
 	["esp"] = false,
 	["lockBind"] = Enum.KeyCode.E,
 	["lockPlayer"] = nil,
-	["menuBind"] = Enum.KeyCode.Insert
+	["menuBind"] = Enum.KeyCode.Insert,
+	["saveBind"] = Enum.KeyCode.Home
 }
 
 local function addConnection(rbxScriptConnection : RBXScriptConnection)
@@ -56,6 +62,20 @@ espFolder.Name = ""
 espFolder.Parent = parentChildren
 
 G2L["random"] = espFolder
+
+--//
+
+if (not RunService:IsStudio()) then
+	if (not isfile("flexgui.cfg")) then
+		writefile("flexgui.cfg", options)
+	end
+
+	for name : string, value : any in next, loadstring("return ".. readfile("flexgui.cfg"))() do
+		if (options[name]) then
+			options[name] = value
+		end
+	end
+end
 
 ----------------------------------------------------------------
 -- ScreenGui
@@ -580,7 +600,7 @@ local function handleToggle(button : TextButton | ImageButton, textLabel : TextL
 		toggleText(textLabel, toggle, textToggle, textToggle2)
 
 		options[textLabel.Name] = toggle
-		
+
 		if (callBack) then
 			callBack(toggle)
 		end
@@ -699,6 +719,8 @@ addConnection(UserInputService.InputBegan:Connect(function(input : InputObject, 
 		end
 	elseif (input.KeyCode == options.menuBind) then
 		Main.Visible = (not Main.Visible)
+	elseif (input.KeyCode == options.saveBind) then
+		writefile("flexgui.cfg", options)
 	end
 end))
 
