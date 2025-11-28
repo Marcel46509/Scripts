@@ -35,7 +35,8 @@ local options = {
 	["fov"] = 85,
 	["esp"] = false,
 	["lockBind"] = Enum.KeyCode.E,
-	["lockPlayer"] = nil
+	["lockPlayer"] = nil,
+	["menuBind"] = Enum.KeyCode.Insert
 }
 
 local function addConnection(rbxScriptConnection : RBXScriptConnection)
@@ -46,7 +47,7 @@ local function removeConnections()
 	for _, rbxScriptConnection : RBXScriptConnection in ipairs(connections) do
 		rbxScriptConnection:Disconnect()
 	end
-	
+
 	table.clear(connections)
 end
 
@@ -73,6 +74,7 @@ Main.Name = "Main"
 Main.Size = UDim2.new(0, 260, 0, 27)
 Main.Position = UDim2.new(0.2123, 0, 0.25059, 0)
 Main.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+Main.LayoutOrder = 9999
 Main.BackgroundTransparency = 0.1
 Main.BorderSizePixel = 0
 Main.BorderColor3 = Color3.fromRGB(0, 0, 0)
@@ -554,23 +556,23 @@ local Smooth1 = TweenInfo.new(1, Enum.EasingStyle.Exponential)
 
 local function toggleText(textLabel : TextLabel, toggle : boolean, textToggle : string?, textToggle2 : string?)
 	textLabel.Text = textLabel.Text:split(":")[1].. ": " --> Ik this stupid lol
-	
+
 	if ((toggle) and (textToggle)) then
 		toggle = textToggle
 	elseif (textToggle2) then
 		toggle = textToggle2
 	end
-	
+
 	textLabel.Text = textLabel.Text.. tostring(toggle)
 end
 
 local function handleToggle(button : TextButton | ImageButton, textLabel : TextLabel, toggle : boolean?, textToggle : string?, textToggle2 : string?)
 	toggleText(textLabel, toggle, textToggle, textToggle2)
-	
+
 	addConnection(button.MouseButton1Click:Connect(function()
 		toggle = (not toggle)
 		toggleText(textLabel, toggle, textToggle, textToggle2)
-		
+
 		options[textLabel.Name] = toggle
 	end))
 end
@@ -578,7 +580,7 @@ end
 local function handleNumber(textBox : TextBox)
 	addConnection(textBox:GetPropertyChangedSignal("Text"):Connect(function()
 		local number = tonumber(textBox.Text)
-		
+
 		if (number) then
 			options[textBox.Name] = number
 		else
@@ -642,7 +644,7 @@ end
 
 addConnection(CloseBtn.MouseButton1Click:Connect(function() --> Bye
 	removeConnections()
-	
+
 	for _, ins : Instance in next, G2L do
 		if (ins) then
 			ins:Destroy()
@@ -652,7 +654,7 @@ end))
 
 addConnection(MinimizeBtn.MouseButton1Click:Connect(function()
 	minimize = (not minimize)
-	
+
 	if (minimize) then
 		TweenService:Create(List, Smooth1, { Position = UDim2.fromScale(0, -1) }):Play()
 	else
@@ -674,29 +676,31 @@ handleNumber(FovBoxBox)
 
 addConnection(UserInputService.InputBegan:Connect(function(input : InputObject, gameProcessedEvent : boolean)
 	if (gameProcessedEvent) then return end
-	
+
 	if ((not options.aimMode) and (input.KeyCode == options.lockBind)) then
 		if (options.lockPlayer) then
 			options.lockPlayer = nil
 		else
 			options.lockPlayer = getClosestPlayer(options.fov)
 		end
+	elseif (input.KeyCode == options.menuBind) then
+		Main.Visible = (not Main.Visible)
 	end
 end))
 
 addConnection(RunService.RenderStepped:Connect(function()
 	espFolder:ClearAllChildren()
-	
+
 	if (options.esp) then
 		for _, player : Player in ipairs(Players:GetPlayers()) do
 			if (player == LocalPlayer) then
 				continue
 			end
-			
+
 			if (not player.Character) then
 				continue
 			end
-			
+
 			if ((not options.teamCheck) or (not isTeammate(player))) then
 				local highLight : Highlight = Instance.new("Highlight")
 				highLight.Name = player.DisplayName
@@ -708,7 +712,7 @@ addConnection(RunService.RenderStepped:Connect(function()
 			end
 		end
 	end
-	
+
 	if ((options.aimMode) and (UserInputService:IsKeyDown(options.lockBind))) then
 		local closestPlayer = getClosestPlayer(options.fov)
 		local head : BasePart = ((closestPlayer and (closestPlayer.Character)) and (closestPlayer.Character:FindFirstChild("Head")))
@@ -722,3 +726,5 @@ addConnection(RunService.RenderStepped:Connect(function()
 		end
 	end
 end))
+
+return options
