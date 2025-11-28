@@ -1,5 +1,3 @@
-return
-
 --[[==================================================================
     FLEX GUI | SIMPLE
     Converted UI (Improved Readability)
