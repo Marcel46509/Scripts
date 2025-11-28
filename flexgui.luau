@@ -745,7 +745,7 @@ addConnection(UserInputService.InputBegan:Connect(function(input : InputObject, 
 	elseif (input.KeyCode == options.menuBind) then
 		Main.Visible = not Main.Visible
 	elseif (input.KeyCode == options.saveBind) then
-		writefile("flexgui.cfg", options)
+		writefile("flexgui.cfg", HttpService:JSONEncode(options))
 	end
 end))
 
