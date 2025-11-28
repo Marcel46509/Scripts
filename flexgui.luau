@@ -68,12 +68,12 @@ G2L["random"] = espFolder
 if (not RunService:IsStudio()) then
 	if (not isfile("flexgui.cfg")) then
 		writefile("flexgui.cfg", options)
-	end
-
+else
 	for name : string, value : any in next, loadstring("return ".. readfile("flexgui.cfg"))() do
 		if (options[name]) then
 			options[name] = value
 		end
+	end
 	end
 end
 
