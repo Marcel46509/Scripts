@@ -5,6 +5,7 @@
 ====================================================================]]
 
 local Players = game:GetService("Players")
+local HttpService = game:GetService("HttpService")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 
@@ -42,7 +43,7 @@ local options = {
 	["lockBind"] = Enum.KeyCode.E,
 	["lockPlayer"] = nil,
 	["menuBind"] = Enum.KeyCode.Insert,
-	["saveBind"] = Enum.KeyCode.Home
+	["saveBind"] = Enum.KeyCode.Home,
 }
 
 local function addConnection(rbxScriptConnection : RBXScriptConnection)
@@ -67,9 +68,9 @@ G2L["random"] = espFolder
 
 if (not RunService:IsStudio()) then
 	if (not isfile("flexgui.cfg")) then
-		writefile("flexgui.cfg", options)
+		writefile("flexgui.cfg", HttpService:JSONEncode(options))
 	else
-		for name : string, value : any in loadstring("return ".. readfile("flexgui.cfg"))() do
+		for name : string, value : any in HttpService:JSONDecode(readfile("flexgui.cfg")) do
 			if (options[name]) then
 				options[name] = value
 			end
@@ -132,11 +133,8 @@ TitleLabel.TextWrapped = true
 TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
 TitleLabel.TextTransparency = 0.01
 TitleLabel.TextSize = 14
-TitleLabel.FontFace = Font.new(
-	"rbxasset://fonts/families/SourceSansPro.json",
-	Enum.FontWeight.SemiBold,
-	Enum.FontStyle.Normal
-)
+TitleLabel.FontFace =
+	Font.new("rbxasset://fonts/families/SourceSansPro.json", Enum.FontWeight.SemiBold, Enum.FontStyle.Normal)
 TitleLabel.Parent = Main
 G2L["3"] = TitleLabel
 
@@ -255,7 +253,8 @@ Mode.TextTransparency = 0.01
 Mode.TextXAlignment = Enum.TextXAlignment.Left
 Mode.BackgroundTransparency = 1
 Mode.TextColor3 = Color3.fromRGB(255, 255, 255)
-Mode.FontFace = Font.new("rbxasset://fonts/families/SourceSansPro.json", Enum.FontWeight.SemiBold, Enum.FontStyle.Normal)
+Mode.FontFace =
+	Font.new("rbxasset://fonts/families/SourceSansPro.json", Enum.FontWeight.SemiBold, Enum.FontStyle.Normal)
 Mode.Size = UDim2.new(0.95, 0, 0.09153, 0)
 Mode.LayoutOrder = -1
 Mode.Parent = List
@@ -294,7 +293,8 @@ VisibleCheck.TextTransparency = 0.01
 VisibleCheck.TextXAlignment = Enum.TextXAlignment.Left
 VisibleCheck.BackgroundTransparency = 1
 VisibleCheck.TextColor3 = Color3.fromRGB(255, 255, 255)
-VisibleCheck.FontFace = Font.new("rbxasset://fonts/families/SourceSansPro.json", Enum.FontWeight.SemiBold, Enum.FontStyle.Normal)
+VisibleCheck.FontFace =
+	Font.new("rbxasset://fonts/families/SourceSansPro.json", Enum.FontWeight.SemiBold, Enum.FontStyle.Normal)
 VisibleCheck.Size = UDim2.new(0.95, 0, 0.09153, 0)
 VisibleCheck.Position = UDim2.new(0, 0, 0.10847, 0)
 VisibleCheck.Parent = List
@@ -332,7 +332,8 @@ TeamCheck.TextTransparency = 0.01
 TeamCheck.TextXAlignment = Enum.TextXAlignment.Left
 TeamCheck.BackgroundTransparency = 1
 TeamCheck.TextColor3 = Color3.fromRGB(255, 255, 255)
-TeamCheck.FontFace = Font.new("rbxasset://fonts/families/SourceSansPro.json", Enum.FontWeight.SemiBold, Enum.FontStyle.Normal)
+TeamCheck.FontFace =
+	Font.new("rbxasset://fonts/families/SourceSansPro.json", Enum.FontWeight.SemiBold, Enum.FontStyle.Normal)
 TeamCheck.Size = UDim2.new(0.95, 0, 0.09153, 0)
 TeamCheck.Position = UDim2.new(0, 0, 0.10847, 0)
 TeamCheck.Parent = List
@@ -397,7 +398,8 @@ FovBoxBox.TextXAlignment = Enum.TextXAlignment.Left
 FovBoxBox.BackgroundTransparency = 1
 FovBoxBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 FovBoxBox.BorderSizePixel = 0
-FovBoxBox.FontFace = Font.new("rbxasset://fonts/families/SourceSansPro.json", Enum.FontWeight.SemiBold, Enum.FontStyle.Normal)
+FovBoxBox.FontFace =
+	Font.new("rbxasset://fonts/families/SourceSansPro.json", Enum.FontWeight.SemiBold, Enum.FontStyle.Normal)
 FovBoxBox.Size = UDim2.new(0.87814, 0, 1, 0)
 FovBoxBox.Position = UDim2.new(0.14818, 0, 0, 0)
 FovBoxBox.Parent = FovBox
@@ -422,7 +424,8 @@ FovLabel.TextTransparency = 0.01
 FovLabel.TextXAlignment = Enum.TextXAlignment.Left
 FovLabel.BackgroundTransparency = 1
 FovLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-FovLabel.FontFace = Font.new("rbxasset://fonts/families/SourceSansPro.json", Enum.FontWeight.SemiBold, Enum.FontStyle.Normal)
+FovLabel.FontFace =
+	Font.new("rbxasset://fonts/families/SourceSansPro.json", Enum.FontWeight.SemiBold, Enum.FontStyle.Normal)
 FovLabel.Size = UDim2.new(0.14413, 0, 1, 0)
 FovLabel.Position = UDim2.new(0, 0, 0, 0)
 FovLabel.LayoutOrder = -1
@@ -471,7 +474,8 @@ SmoothBoxBox.TextXAlignment = Enum.TextXAlignment.Left
 SmoothBoxBox.BackgroundTransparency = 1
 SmoothBoxBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 SmoothBoxBox.BorderSizePixel = 0
-SmoothBoxBox.FontFace = Font.new("rbxasset://fonts/families/SourceSansPro.json", Enum.FontWeight.SemiBold, Enum.FontStyle.Normal)
+SmoothBoxBox.FontFace =
+	Font.new("rbxasset://fonts/families/SourceSansPro.json", Enum.FontWeight.SemiBold, Enum.FontStyle.Normal)
 SmoothBoxBox.Size = UDim2.new(0.60709, 0, 1, 0)
 SmoothBoxBox.Position = UDim2.new(0.41923, 0, 0, 0)
 SmoothBoxBox.Parent = SmoothnessBox
@@ -496,7 +500,8 @@ SmoothLabel.TextTransparency = 0.01
 SmoothLabel.TextXAlignment = Enum.TextXAlignment.Left
 SmoothLabel.BackgroundTransparency = 1
 SmoothLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-SmoothLabel.FontFace = Font.new("rbxasset://fonts/families/SourceSansPro.json", Enum.FontWeight.SemiBold, Enum.FontStyle.Normal)
+SmoothLabel.FontFace =
+	Font.new("rbxasset://fonts/families/SourceSansPro.json", Enum.FontWeight.SemiBold, Enum.FontStyle.Normal)
 SmoothLabel.Size = UDim2.new(0.41923, 0, 1, 0)
 SmoothLabel.Position = UDim2.new(0, 0, 0.10847, 0)
 SmoothLabel.LayoutOrder = -1
@@ -581,7 +586,7 @@ local Smooth1 = TweenInfo.new(1, Enum.EasingStyle.Exponential)
 --//
 
 local function toggleText(textLabel : TextLabel, toggle : boolean, textToggle : string?, textToggle2 : string?)
-	textLabel.Text = textLabel.Text:split(":")[1].. ": " --> Ik this stupid lol
+	textLabel.Text = textLabel.Text:split(":")[1].. ": "
 
 	if ((toggle) and (textToggle)) then
 		toggle = textToggle
@@ -592,7 +597,14 @@ local function toggleText(textLabel : TextLabel, toggle : boolean, textToggle : 
 	textLabel.Text = textLabel.Text.. tostring(toggle)
 end
 
-local function handleToggle(button : TextButton | ImageButton, textLabel : TextLabel, toggle : boolean?, textToggle : string?, textToggle2 : string?, callBack : (toggle : boolean) -> ()?)
+local function handleToggle(
+	button : TextButton | ImageButton,
+	textLabel : TextLabel,
+	toggle : boolean?,
+	textToggle : string?,
+	textToggle2 : string?,
+	callBack : (toggle : boolean) -> ()?
+)
 	toggleText(textLabel, toggle, textToggle, textToggle2)
 
 	addConnection(button.MouseButton1Click:Connect(function()
@@ -622,10 +634,10 @@ end
 
 --//
 
-local function isVisible(position : Vector3, ignoreList : {any}) : boolean
+local function isVisible(position : Vector3, ignoreList : { any }) : boolean
 	local head : BasePart = (LocalPlayer.Character and (LocalPlayer.Character:FindFirstChild("Head")))
 
-	return (head and (#CurrentCamera:GetPartsObscuringTarget({head.Position, position}, ignoreList) == 0))
+	return (head and (#CurrentCamera:GetPartsObscuringTarget({ head.Position, position }, ignoreList) == 0))
 end
 
 local function isTeammate(player : Player)
@@ -633,23 +645,34 @@ local function isTeammate(player : Player)
 end
 
 local function isAlive(player : Player)
-	return ((player.Character) and (player.Character:FindFirstChildOfClass("Humanoid")))
+	return (player.Character and (player.Character:FindFirstChildOfClass("Humanoid")))
 end
 
 local function getClosestPlayer(FOV : number)
 	local closestPlayer = nil
 
-	for _, player in ipairs(Players:GetPlayers()) do
-		if (player == LocalPlayer) then continue end
+	for _, player : Player in ipairs(Players:GetPlayers()) do
+		if (player == LocalPlayer) then
+			continue
+		end
 
-		if (not isAlive(player)) then continue end
-		if (options.teamCheck) then if (isTeammate(player)) then continue end end
+		if (not isAlive(player)) then
+			continue
+		end
 
-		local head = ((player.Character) and (player.Character:FindFirstChild("Head")))
-		if (not head) then continue end
+		if (options.teamCheck) then
+			if (isTeammate(player)) then
+				continue
+			end
+		end
+
+		local head : BasePart = (player.Character and (player.Character:FindFirstChild("Head")))
+		if (not head) then
+			continue
+		end
 
 		if (options.visibleCheck) then
-			if (not isVisible(head.Position, {player.Character, LocalPlayer.Character, CurrentCamera})) then
+			if (not isVisible(head.Position, { player.Character, LocalPlayer.Character, CurrentCamera })) then
 				continue
 			end
 		end
@@ -709,7 +732,9 @@ handleNumber(FovBoxBox)
 --//
 
 addConnection(UserInputService.InputBegan:Connect(function(input : InputObject, gameProcessedEvent : boolean)
-	if (gameProcessedEvent) then return end
+	if (gameProcessedEvent) then
+        return
+    end
 
 	if ((not options.aimMode) and (input.KeyCode == options.lockBind)) then
 		if (options.lockPlayer) then
@@ -718,7 +743,7 @@ addConnection(UserInputService.InputBegan:Connect(function(input : InputObject, 
 			options.lockPlayer = getClosestPlayer(options.fov)
 		end
 	elseif (input.KeyCode == options.menuBind) then
-		Main.Visible = (not Main.Visible)
+		Main.Visible = not Main.Visible
 	elseif (input.KeyCode == options.saveBind) then
 		writefile("flexgui.cfg", options)
 	end
@@ -751,14 +776,20 @@ addConnection(RunService.RenderStepped:Connect(function()
 
 	if ((options.aimMode) and (UserInputService:IsKeyDown(options.lockBind))) then
 		local closestPlayer = getClosestPlayer(options.fov)
-		local head : BasePart = ((closestPlayer and (closestPlayer.Character)) and (closestPlayer.Character:FindFirstChild("Head")))
+		local head : BasePart = (
+			(closestPlayer and closestPlayer.Character) and (closestPlayer.Character:FindFirstChild("Head"))
+		)
 
 		if (head) then
 			CurrentCamera.CFrame = CurrentCamera.CFrame:Lerp(CFrame.new(CurrentCamera.CFrame.Position, head.Position), options.smoothness)
 		end
 	else
-		if (options.lockPlayer) then
-			CurrentCamera.CFrame = CFrame.new(CurrentCamera.CFrame.Position, options.lockPlayer.Character.Head.Position)
+		local head : BasePart = (
+			(options.lockPlayer and options.lockPlayer.Character) and (options.lockPlayer.Character:FindFirstChild("Head"))
+		)
+
+		if (head) then
+			CurrentCamera.CFrame = CFrame.new(CurrentCamera.CFrame.Position, head.Position)
 		end
 	end
 end))
