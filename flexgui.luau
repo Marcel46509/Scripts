@@ -1,5 +1,3 @@
-return
-
 --[[==================================================================
     FLEX GUI | SIMPLE
     Converted UI (Improved Readability)
@@ -25,7 +23,7 @@ if (not RunService:IsStudio()) then
 	else
 		parentChildren = gethui()
 	end
-	
+
 	if (not writefile) then
 		LocalPlayer:Kick("Exploit not supported, writefile()!")
 		return
@@ -70,12 +68,12 @@ G2L["random"] = espFolder
 if (not RunService:IsStudio()) then
 	if (not isfile("flexgui.cfg")) then
 		writefile("flexgui.cfg", options)
-else
-	for name : string, value : any in next, loadstring("return ".. readfile("flexgui.cfg"))() do
-		if (options[name]) then
-			options[name] = value
+	else
+		for name : string, value : any in loadstring("return ".. readfile("flexgui.cfg"))() do
+			if (options[name]) then
+				options[name] = value
+			end
 		end
-	end
 	end
 end
 
