@@ -73,11 +73,19 @@ local function saveConfig()
 end
 
 local function loadConfig()
-	for name : string, value : any in HttpService:JSONDecode(readfile("flexgui.cfg")) do
-		if (options[name]) then
-			options[name] = value
+	xpcall(function()
+		for name : string, value : any in HttpService:JSONDecode(readfile("flexgui.cfg")) do
+			if (options[name]) then
+				options[name] = value
+			end
 		end
-	end
+	end, function(message : string)
+		if (isfile("flexgui.cfg")) then
+			delfile("flexgui.cfg")
+		end
+
+		warn(message)
+	end)
 end
 
 if (not RunService:IsStudio()) then
