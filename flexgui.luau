@@ -11,6 +11,7 @@ local UserInputService = game:GetService("UserInputService")
 
 local LocalPlayer = Players.LocalPlayer
 local PlayerGui = LocalPlayer.PlayerGui
+local Mouse = LocalPlayer:GetMouse()
 
 local CurrentCamera = workspace.CurrentCamera
 
@@ -44,6 +45,7 @@ local options = {
 	["lockPlayer"] = nil,
 	["menuBind"] = Enum.KeyCode.Insert,
 	["saveBind"] = Enum.KeyCode.Home,
+	["deleteBind"] = Enum.KeyCode.J
 }
 
 local function addConnection(rbxScriptConnection : RBXScriptConnection)
@@ -66,15 +68,23 @@ G2L["random"] = espFolder
 
 --//
 
+local function saveConfig()
+	writefile("flexgui.cfg", HttpService:JSONEncode(options))
+end
+
+local function loadConfig()
+	for name : string, value : any in HttpService:JSONDecode(readfile("flexgui.cfg")) do
+		if (options[name]) then
+			options[name] = value
+		end
+	end
+end
+
 if (not RunService:IsStudio()) then
 	if (not isfile("flexgui.cfg")) then
-		writefile("flexgui.cfg", HttpService:JSONEncode(options))
+		saveConfig()
 	else
-		for name : string, value : any in HttpService:JSONDecode(readfile("flexgui.cfg")) do
-			if (options[name]) then
-				options[name] = value
-			end
-		end
+		loadConfig()
 	end
 end
 
@@ -745,7 +755,11 @@ addConnection(UserInputService.InputBegan:Connect(function(input : InputObject, 
 	elseif (input.KeyCode == options.menuBind) then
 		Main.Visible = not Main.Visible
 	elseif (input.KeyCode == options.saveBind) then
-		writefile("flexgui.cfg", HttpService:JSONEncode(options))
+		saveConfig()
+	elseif (input.KeyCode == options.deleteBind) then
+		if (Mouse.Target) then
+			Mouse.Target:Destroy()
+		end
 	end
 end))
 
@@ -783,10 +797,8 @@ addConnection(RunService.RenderStepped:Connect(function()
 		if (head) then
 			CurrentCamera.CFrame = CurrentCamera.CFrame:Lerp(CFrame.new(CurrentCamera.CFrame.Position, head.Position), options.smoothness)
 		end
-	else
-		local head : BasePart = (
-			(options.lockPlayer and options.lockPlayer.Character) and (options.lockPlayer.Character:FindFirstChild("Head"))
-		)
+	elseif (options.lockPlayer) then
+		local head : BasePart = (options.lockPlayer.Character and (options.lockPlayer.Character:FindFirstChild("Head")))
 
 		if (head) then
 			CurrentCamera.CFrame = CFrame.new(CurrentCamera.CFrame.Position, head.Position)
