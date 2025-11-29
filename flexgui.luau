@@ -810,6 +810,8 @@ addConnection(RunService.RenderStepped:Connect(function()
 
 		if (head) then
 			CurrentCamera.CFrame = CFrame.new(CurrentCamera.CFrame.Position, head.Position)
+		else
+			options.lockPlayer = nil
 		end
 	end
 end))
