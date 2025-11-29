@@ -604,55 +604,6 @@ local Smooth1 = TweenInfo.new(1, Enum.EasingStyle.Exponential)
 
 --//
 
-local function toggleText(textLabel : TextLabel, toggle : boolean, textToggle : string?, textToggle2 : string?)
-	textLabel.Text = textLabel.Text:split(":")[1].. ": "
-
-	if ((toggle) and (textToggle)) then
-		toggle = textToggle
-	elseif (textToggle2) then
-		toggle = textToggle2
-	end
-
-	textLabel.Text = textLabel.Text.. tostring(toggle)
-end
-
-local function handleToggle(
-	button : TextButton | ImageButton,
-	textLabel : TextLabel,
-	toggle : boolean?,
-	textToggle : string?,
-	textToggle2 : string?,
-	callBack : (toggle : boolean) -> ()?
-)
-	toggleText(textLabel, toggle, textToggle, textToggle2)
-
-	addConnection(button.MouseButton1Click:Connect(function()
-		toggle = (not toggle)
-		toggleText(textLabel, toggle, textToggle, textToggle2)
-
-		options[textLabel.Name] = toggle
-
-		if (callBack) then
-			callBack(toggle)
-		end
-	end))
-end
-
-local function handleNumber(textBox : TextBox)
-	addConnection(textBox:GetPropertyChangedSignal("Text"):Connect(function()
-		local number = tonumber(textBox.Text)
-
-		if (number) then
-			options[textBox.Name] = number
-		else
-			options[textBox.Name] = tonumber(textBox.PlaceholderText)
-			textBox.Text = ""
-		end
-	end))
-end
-
---//
-
 local function isVisible(position : Vector3, ignoreList : { any }) : boolean
 	local head : BasePart = (LocalPlayer.Character and (LocalPlayer.Character:FindFirstChild("Head")))
 
@@ -664,7 +615,8 @@ local function isTeammate(player : Player)
 end
 
 local function isAlive(player : Player)
-	return (player.Character and (player.Character:FindFirstChildOfClass("Humanoid")))
+	local humanoid : Humanoid = (player.Character and (player.Character:FindFirstChildOfClass("Humanoid")))
+	return (humanoid and (humanoid.Health > 0))
 end
 
 local function getClosestPlayer(FOV : number)
@@ -710,6 +662,55 @@ local function getClosestPlayer(FOV : number)
 	end
 
 	return closestPlayer, FOV
+end
+
+--//
+
+local function toggleText(textLabel : TextLabel, toggle : boolean, textToggle : string?, textToggle2 : string?)
+	textLabel.Text = textLabel.Text:split(":")[1].. ": "
+
+	if ((toggle) and (textToggle)) then
+		toggle = textToggle
+	elseif (textToggle2) then
+		toggle = textToggle2
+	end
+
+	textLabel.Text = textLabel.Text.. tostring(toggle)
+end
+
+local function handleToggle(
+	button : TextButton | ImageButton,
+	textLabel : TextLabel,
+	toggle : boolean?,
+	textToggle : string?,
+	textToggle2 : string?,
+	callBack : (toggle : boolean) -> ()?
+)
+	toggleText(textLabel, toggle, textToggle, textToggle2)
+
+	addConnection(button.MouseButton1Click:Connect(function()
+		toggle = (not toggle)
+		toggleText(textLabel, toggle, textToggle, textToggle2)
+
+		options[textLabel.Name] = toggle
+
+		if (callBack) then
+			callBack(toggle)
+		end
+	end))
+end
+
+local function handleNumber(textBox : TextBox)
+	addConnection(textBox:GetPropertyChangedSignal("Text"):Connect(function()
+		local number = tonumber(textBox.Text)
+
+		if (number) then
+			options[textBox.Name] = number
+		else
+			options[textBox.Name] = tonumber(textBox.PlaceholderText)
+			textBox.Text = ""
+		end
+	end))
 end
 
 --//
@@ -807,7 +808,13 @@ addConnection(RunService.RenderStepped:Connect(function()
 			CurrentCamera.CFrame = CurrentCamera.CFrame:Lerp(CFrame.new(CurrentCamera.CFrame.Position, head.Position), options.smoothness)
 		end
 	elseif (options.lockPlayer) then
-		local head : BasePart = (options.lockPlayer.Character and (options.lockPlayer.Character:FindFirstChild("Head")))
+		if (not isAlive(options.lockPlayer)) then
+			options.lockPlayer = nil
+
+			return
+		end
+
+		local head : BasePart = options.lockPlayer.Character:FindFirstChild("Head")
 
 		if (head) then
 			CurrentCamera.CFrame = CFrame.new(CurrentCamera.CFrame.Position, head.Position)
