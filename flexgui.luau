@@ -41,6 +41,7 @@ local options = {
 	["smoothness"] = 0.5,
 	["fov"] = 85,
 	["esp"] = false,
+	["skipAssistHold"] = false,
 	["lockBind"] = Enum.KeyCode.E,
 	["lockPlayer"] = nil,
 	["menuBind"] = Enum.KeyCode.Insert,
@@ -751,8 +752,8 @@ handleNumber(FovBoxBox)
 
 addConnection(UserInputService.InputBegan:Connect(function(input : InputObject, gameProcessedEvent : boolean)
 	if (gameProcessedEvent) then
-        return
-    end
+		return
+	end
 
 	if ((not options.aimMode) and (input.KeyCode == options.lockBind)) then
 		if (options.lockPlayer) then
@@ -796,7 +797,7 @@ addConnection(RunService.RenderStepped:Connect(function()
 		end
 	end
 
-	if ((options.aimMode) and (UserInputService:IsKeyDown(options.lockBind))) then
+	if ((options.aimMode) and (UserInputService:IsKeyDown(options.lockBind) or options.skipAssistHold)) then
 		local closestPlayer = getClosestPlayer(options.fov)
 		local head : BasePart = (
 			(closestPlayer and closestPlayer.Character) and (closestPlayer.Character:FindFirstChild("Head"))
