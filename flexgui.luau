@@ -76,7 +76,7 @@ end
 local function loadConfig()
 	xpcall(function()
 		for name : string, value : any in HttpService:JSONDecode(readfile("flexgui.cfg")) do
-			if (options[name]) then
+			if (options[name] ~= nil) then
 				options[name] = value
 			end
 		end
