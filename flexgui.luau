@@ -802,6 +802,10 @@ end))
 
 task.defer(function()
 	while task.wait(0.1) do
+		if (not espFolder) then
+			break
+		end
+
 		for _, highLight : Highlight in ipairs(espFolder:GetChildren()) do
 			highLight:Destroy()
 		end
