@@ -774,30 +774,6 @@ addConnection(UserInputService.InputBegan:Connect(function(input : InputObject, 
 end))
 
 addConnection(RunService.RenderStepped:Connect(function()
-	espFolder:ClearAllChildren()
-
-	if (options.esp) then
-		for _, player : Player in ipairs(Players:GetPlayers()) do
-			if (player == LocalPlayer) then
-				continue
-			end
-
-			if (not player.Character) then
-				continue
-			end
-
-			if ((not options.teamCheck) or (not isTeammate(player))) then
-				local highLight : Highlight = Instance.new("Highlight")
-				highLight.Name = player.DisplayName
-				highLight.FillTransparency = 1
-				highLight.OutlineTransparency = 0.25
-				highLight.OutlineColor = player.TeamColor.Color
-				highLight.Adornee = player.Character
-				highLight.Parent = espFolder
-			end
-		end
-	end
-
 	if ((options.aimMode) and (UserInputService:IsKeyDown(options.lockBind) or options.skipAssistHold)) then
 		local closestPlayer = getClosestPlayer(options.fov)
 		local head : BasePart = (
@@ -823,5 +799,35 @@ addConnection(RunService.RenderStepped:Connect(function()
 		end
 	end
 end))
+
+task.defer(function()
+	while task.wait(0.1) do
+		for _, highLight : Highlight in ipairs(espFolder:GetChildren()) do
+			highLight:Destroy()
+		end
+
+		if (options.esp) then
+			for _, player : Player in ipairs(Players:GetPlayers()) do
+				if (player == LocalPlayer) then
+					continue
+				end
+
+				if (not player.Character) then
+					continue
+				end
+
+				if ((not options.teamCheck) or (not isTeammate(player))) then
+					local highLight : Highlight = Instance.new("Highlight")
+					highLight.Name = player.DisplayName
+					highLight.FillTransparency = 1
+					highLight.OutlineTransparency = 0.25
+					highLight.OutlineColor = player.TeamColor.Color
+					highLight.Adornee = player.Character
+					highLight.Parent = espFolder
+				end
+			end
+		end
+	end
+end)
 
 return options
