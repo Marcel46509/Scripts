@@ -16,28 +16,28 @@ local function GetBall()
 			if (not OldHitBox) then
 				OldHitBox = v.Size
 			end
-			--//
+
 			return v
 		end
 	end
-	--//
+
 	return false
 end
 
 UIS.InputBegan:Connect(function(inp, GPE)
 	if (GPE) then return end
-	--//
+
 	local Pilka : Instance = GetBall()
-	--//
+
 	if (Pilka) then
 		local Studs = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - Pilka.Position).Magnitude
-		--//
+
 		if (inp.KeyCode == TPPilka) then
 			if (TP_Studs >= Studs) then
 				Pilka.Position = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
 			end
 		end
-		--//
+
 		if (inp.KeyCode == PilkaHitBox) then
 			if (Pilka.Size ~= OldHitBox) then
 				Pilka.Size = OldHitBox
