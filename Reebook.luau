@@ -46,9 +46,9 @@ if (not _G.Loaded) then
 		local newOld = oldFunc(...)
 
 		newOld.Size = Vector3.new(
-            (newOld.Size.X + _G.HitboxSize),
-            newOld.Size.Y,
-            (newOld.Size.Z + _G.HitboxSize)
+            (newOld.Size.X + _G.HitboxSize.X),
+            (newOld.Size.Y + _G.HitboxSize.Y),
+            (newOld.Size.Z + _G.HitboxSize.X)
         )
 
         if (_G.DebugPrints) then
