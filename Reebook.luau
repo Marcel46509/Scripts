@@ -12,6 +12,7 @@ if (not _G.Loaded) then
 
     --// Anti-Cheat
 
+    --[[
     local antiCheatRemote : RemoteEvent = sharedEvents:WaitForChild("Soccer"):WaitForChild("AntiCheat")
 
     local oldNamecall; oldNamecall = hookmetamethod(game, "__namecall", function(self, ...)
@@ -36,6 +37,7 @@ if (not _G.Loaded) then
 
         return oldNamecall(self, unpack(args))
     end)
+    --]]
 
     --// Hitboxes
 
