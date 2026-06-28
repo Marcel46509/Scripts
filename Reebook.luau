@@ -25,10 +25,12 @@ if (not _G.Loaded) then
                 return
             elseif (method == "FireServer") then
                 if (self.Name == lightingDetailsUpdater.Name) then
-                    local report = args[2]
+                    local reports = args[2]
 
-                    if (report and (report ~= {})) then
-                        warn("[🟥] Possible Detection:", report.Category, report.Description)
+                    if (reports and (reports ~= {})) then
+                        for _, reportData in ipairs(reports) do
+                            warn("[🟥] Possible Detection:", reportData.Category, ",", reportData.Description)
+                        end
                     end
 
                     args[2] = {}
