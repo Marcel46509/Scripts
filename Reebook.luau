@@ -1,9 +1,11 @@
+--> Wiemy że to widzicie chłopaki :3 <333
+
 --// Locals
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local sharedEvents : Folder = ReplicatedStorage.SharedEvents
 local sharedModules : Folder = ReplicatedStorage.SharedModules
+local lightingDetailsUpdater : RemoteEvent = ReplicatedStorage:WaitForChild("LightingDetailsUpdater")
 
 --// Main
 
@@ -11,9 +13,6 @@ if (not _G.Loaded) then
     _G.Loaded = true
 
     --// Anti-Cheat
-
-    --[[
-    local antiCheatRemote : RemoteEvent = sharedEvents:WaitForChild("Soccer"):WaitForChild("AntiCheat")
 
     local oldNamecall; oldNamecall = hookmetamethod(game, "__namecall", function(self, ...)
         local method = getnamecallmethod()
@@ -25,11 +24,17 @@ if (not _G.Loaded) then
             if (method == "Kick") then
                 return
             elseif (method == "FireServer") then
-                if (self.Name == antiCheatRemote.Name) then
-                    args = {}
+                if (self.Name == lightingDetailsUpdater.Name) then
+                    local report = args[2]
+
+                    if (report) then
+                        warn("Possible Detection", report.Category, report.Description)
+                    end
+
+                    args[2] = {}
 
                     if (_G.DebugPrints) then
-                        print("Spoofed!")
+                        print("Spoofed report!")
                     end
                 end
             end
@@ -37,7 +42,6 @@ if (not _G.Loaded) then
 
         return oldNamecall(self, unpack(args))
     end)
-    --]]
 
     --// Hitboxes
 
