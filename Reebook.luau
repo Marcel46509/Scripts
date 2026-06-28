@@ -53,10 +53,19 @@ if (not _G.Loaded) then
 	hitBox.new = function(...)
 		local newOld = oldFunc(...)
 
-		newOld.Size = Vector3.new(
-            (newOld.Size.X + _G.HitboxSize.X),
-            (newOld.Size.Y + _G.HitboxSize.Y),
-            (newOld.Size.Z + _G.HitboxSize.X)
+        local args = {...}
+        local name = args[2]
+
+        if (_G.DebugPrints) then
+            print(name)
+        end
+
+        local newHitbox = ((_G.CustomHitboxSizes and _G.CustomHitboxSizes[name]) or _G.HitboxSize)
+
+        newOld.Size = Vector3.new(
+            (newOld.Size.X + newHitbox.X),
+            (newOld.Size.Y + newHitbox.Y),
+            (newOld.Size.Z + newHitbox.X)
         )
 
         if (_G.DebugPrints) then
