@@ -28,7 +28,7 @@ if (not _G.Loaded) then
                     local report = args[2]
 
                     if (report) then
-                        warn("Possible Detection", report.Category, report.Description)
+                        warn("[🟥] Possible Detection:", report.Category, report.Description)
                     end
 
                     args[2] = {}
