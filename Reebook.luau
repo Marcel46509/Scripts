@@ -28,8 +28,8 @@ if (not _G.Loaded) then
                     local reports = args[2]
 
                     if (reports and (reports ~= {})) then
-                        for _, reportData in ipairs(reports) do
-                            warn("[🟥] Possible Detection:", reportData.Category, ",", reportData.Description)
+                        for _, reportData in next, reports do
+                            warn("[🟥] Possible Detection:", reportData.Category, reportData.Description)
                         end
                     end
 
