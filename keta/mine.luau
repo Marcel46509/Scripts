@@ -545,7 +545,7 @@ if (not _G.Loaded) then
 			print(name)
 		end
 
-		local newHitbox = ((_G.CustomHitboxes and _G.CustomHitboxes[name]) or 0)
+		local newHitbox = ((_G.CustomHitboxes and _G.CustomHitboxes[name]) or Vector3.new(0, 0, 0))
 
 		newOld.Size = Vector3.new(
 			(newOld.Size.X + newHitbox.X),
