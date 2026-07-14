@@ -399,11 +399,13 @@ local function addHitboxItem(name : string)
 	Z.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	Z.Text = (config[name].Z or "")
 
-	config[name] = {
-		["X"] = 0,
-		["Y"] = 0,
-		["Z"] = 0
-	}
+	if (config[name] == {}) then
+		config[name] = {
+			["X"] = 0,
+			["Y"] = 0,
+			["Z"] = 0
+		}
+	end
 
 	handleTextbox(name, X)
 	handleTextbox(name, Y)
