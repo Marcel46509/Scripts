@@ -52,6 +52,8 @@ local lightingDetailsUpdater : RemoteEvent = ReplicatedStorage:WaitForChild("Lig
 local hitboxModule = require(sharedModules.Hitbox)
 local hitboxConfig = require(sharedModules.Hitbox.Config)
 
+local emptyVector = Vector3.new()
+
 local github = "https://raw.githubusercontent.com/Marcel46509/Scripts/refs/heads/main/keta/"
 
 local config = {}
@@ -545,7 +547,7 @@ if (not _G.Loaded) then
 			print(name)
 		end
 
-		local newHitbox = ((_G.CustomHitboxes and _G.CustomHitboxes[name]) or Vector3.new(0, 0, 0))
+		local newHitbox = ((_G.CustomHitboxes and _G.CustomHitboxes[name]) or emptyVector)
 
 		newOld.Size = Vector3.new(
 			(newOld.Size.X + newHitbox.X),
