@@ -381,7 +381,6 @@ local function addHitboxItem(name : string)
 	X.Size = UDim2.new(0.05457, 0, 0.95, 0)
 	X.Position = UDim2.new(0.79765, 0, 0.475, 0)
 	X.BorderColor3 = Color3.fromRGB(0, 0, 0)
-	X.Text = (config[name].X or "")
 
 
 	-- StarterGui.UI.Main.List.Hitbox.X.UICorner
@@ -420,7 +419,6 @@ local function addHitboxItem(name : string)
 	Y.Size = UDim2.new(0.05457, 0, 0.95, 0)
 	Y.Position = UDim2.new(0.86113, 0, 0.475, 0)
 	Y.BorderColor3 = Color3.fromRGB(0, 0, 0)
-	Y.Text = (config[name].Y or "")
 
 
 	-- StarterGui.UI.Main.List.Hitbox.Y.UICorner
@@ -452,11 +450,14 @@ local function addHitboxItem(name : string)
 	Z.Size = UDim2.new(0.05457, 0, 0.95, 0)
 	Z.Position = UDim2.new(0.9246, 0, 0.475, 0)
 	Z.BorderColor3 = Color3.fromRGB(0, 0, 0)
-	Z.Text = (config[name].Z or "")
 
 	handleTextbox(name, X)
 	handleTextbox(name, Y)
 	handleTextbox(name, Z)
+
+	X.Text = (config[name].X or "")
+	Y.Text = (config[name].Y or "")
+	Z.Text = (config[name].Z or "")
 
 	-- StarterGui.UI.Main.List.Hitbox.Z.UICorner
 	local Object_8 = Instance.new("UICorner", Z)
