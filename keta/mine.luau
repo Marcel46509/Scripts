@@ -308,8 +308,6 @@ local function handleTextbox(name : string, textBox : TextBox)
 	textBox.Text = handleEmptySpaces(textBox.Text)
 
 	addGarbage(textBox:GetPropertyChangedSignal("Text"):Connect(function()
-		textBox.Text = handleEmptySpaces(textBox.Text)
-
 		config[name][textBox.Name] = (tonumber(textBox.Text) or 0)
 
 		local cfg = config[name]
