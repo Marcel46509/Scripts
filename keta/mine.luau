@@ -4,23 +4,23 @@ local runService = game:GetService("RunService")
 local isStudio = runService:IsStudio()
 
 if (isStudio) then
-	isfile = function()
+	isfile = function(...)
 		return
 	end
 
-	writefile = function()
+	writefile = function(...)
 		return
 	end
 
-	readfile = function()
+	readfile = function(...)
 		return
 	end
 
-	hookmetamethod = function()
+	hookmetamethod = function(...)
 		return
 	end
 
-	getcustomasset = function()
+	getcustomasset = function(...)
 		return "rbxassetid://18820535797"
 	end
 end
@@ -104,6 +104,8 @@ if (not isStudio) then
 		LocalPlayer:Kick("Exploit not supported, hookmetamethod()!")
 		return
 	end
+
+	writefile("boykisser.png", game:HttpGet("github.com/Marcel46509/Scripts/blob/main/keta/boykisserreal.png?raw=true"))
 end
 
 _G.CustomHitboxes = {}
@@ -217,11 +219,7 @@ Save.Size = UDim2.fromScale(0.082, 1)
 Save.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Save.Text = "Save"
 Save.Name = "Save"
-Save.Position = UDim2.fromScale(0.785, 0, 0)
-
-if (not isStudio) then
-	writefile("boykisser.png", game:HttpGet("https://static.wikia.nocookie.net/siivagunner/images/f/f4/Silly_Cat_%28Character%29.png/revision/latest?cb=20241218182954"))
-end
+Save.Position = UDim2.fromScale(0.785, 0)
 
 -- StarterGui.UI.Main.Top.Logo
 local Logo = Instance.new("ImageLabel", Top)
