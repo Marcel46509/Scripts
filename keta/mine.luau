@@ -444,76 +444,80 @@ addGarbage(UserInputService.InputBegan:Connect(function(inp, gpe)
 	end
 end))
 
---// Spoof woof
+if (not _G.Loaded) then
+	_G.Loaded = true
 
-local oldNamecall; oldNamecall = hookmetamethod(game, "__namecall", function(self, ...)
-	local method = getnamecallmethod()
-	local callingscript = getcallingscript()
+	--// Spoof woof
 
-	local args = {...}
+	local oldNamecall; oldNamecall = hookmetamethod(game, "__namecall", function(self, ...)
+		local method = getnamecallmethod()
+		local callingscript = getcallingscript()
 
-	if (not checkcaller()) then
-		if (method == "Kick") then
-			return
-		elseif (method == "FireServer") then
-			if (self.Name == lightingDetailsUpdater.Name) then
-				local reports = args[2]
+		local args = {...}
 
-				if (reports and (reports ~= {})) then
-					for _, reportData in next, reports do
-						warn("[🟥] Possible Detection:", reportData.Category, reportData.Description)
+		if (not checkcaller()) then
+			if (method == "Kick") then
+				return
+			elseif (method == "FireServer") then
+				if (self.Name == lightingDetailsUpdater.Name) then
+					local reports = args[2]
+
+					if (reports and (reports ~= {})) then
+						for _, reportData in next, reports do
+							warn("[🟥] Possible Detection:", reportData.Category, reportData.Description)
+						end
 					end
-				end
 
-				args[2] = {}
+					args[2] = {}
 
-				if (_G.DebugPrints) then
-					print("Spoofed report!")
-				end
-			elseif (self.Name == "AntiCheat") then
-				if (args[2]) then
-					warn("[🟥] Possible Detection:", args[2])
-				end
+					if (_G.DebugPrints) then
+						print("Spoofed report!")
+					end
+				elseif (self.Name == "AntiCheat") then
+					if (args[2]) then
+						warn("[🟥] Possible Detection:", args[2])
+					end
 
-				args = {}
+					args = {}
 
-				if (_G.DebugPrints) then
-					print("Spoofed ac!")
+					if (_G.DebugPrints) then
+						print("Spoofed ac!")
+					end
 				end
 			end
 		end
+
+		return oldNamecall(self, unpack(args))
+	end)
+
+	--// Yeye hitbox settin'
+
+	local oldFunc = hitboxModule.new
+
+	hitboxModule.new = function(...)
+		local newOld = oldFunc(...)
+
+		local args = {...}
+		local name = args[2]
+
+		if (_G.DebugPrints) then
+			print(name)
+		end
+
+		local newHitbox = ((_G.CustomHitboxes and _G.CustomHitboxes[name]) or 0)
+
+		newOld.Size = Vector3.new(
+			(newOld.Size.X + newHitbox.X),
+			(newOld.Size.Y + newHitbox.Y),
+			(newOld.Size.Z + newHitbox.X)
+		)
+
+		if (_G.DebugPrints) then
+			print(newOld.Size.X, newOld.Size.Y, newOld.Size.Z)
+		end
+
+		return newOld
 	end
-
-	return oldNamecall(self, unpack(args))
-end)
-
---// Yeye hitbox settin'
-
-local oldFunc = hitboxModule.new
-
-hitboxModule.new = function(...)
-	local newOld = oldFunc(...)
-
-	local args = {...}
-	local name = args[2]
-
-	if (_G.DebugPrints) then
-		print(name)
-	end
-
-	local newHitbox = ((_G.CustomHitboxes and _G.CustomHitboxes[name]) or 0)
-
-	newOld.Size = Vector3.new(
-		(newOld.Size.X + newHitbox.X),
-		(newOld.Size.Y + newHitbox.Y),
-		(newOld.Size.Z + newHitbox.X)
-	)
-
-	if (_G.DebugPrints) then
-		print(newOld.Size.X, newOld.Size.Y, newOld.Size.Z)
-	end
-
-	return newOld
 end
 
 if (_G.DebugPrints) then
