@@ -105,7 +105,7 @@ if (not isStudio) then
 		return
 	end
 
-	writefile("boykisser.png", game:HttpGet("github.com/Marcel46509/Scripts/blob/main/keta/boykisserreal.png?raw=true"))
+	writefile("boykisser.png", game:HttpGet("https://raw.githubusercontent.com/Marcel46509/Scripts/refs/heads/main/keta/boykisserreal.png"))
 end
 
 _G.CustomHitboxes = {}
