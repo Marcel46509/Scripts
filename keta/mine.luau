@@ -296,8 +296,20 @@ Object_10.SortOrder = Enum.SortOrder.LayoutOrder
 
 --// end of creating an ui
 
+local function handleEmptySpaces(text : string)
+	if (text == "0") then
+		text = ""
+	end
+
+	return text
+end
+
 local function handleTextbox(name : string, textBox : TextBox)
+	textBox.Text = handleEmptySpaces(textBox.Text)
+
 	addGarbage(textBox:GetPropertyChangedSignal("Text"):Connect(function()
+		textBox.Text = handleEmptySpaces(textBox.Text)
+
 		config[name][textBox.Name] = (tonumber(textBox.Text) or 0)
 
 		local cfg = config[name]
@@ -308,7 +320,11 @@ end
 
 local function addHitboxItem(name : string)
 	if (not config[name]) then
-		config[name] = {}
+		config[name] = {
+			["X"] = 0,
+			["Y"] = 0,
+			["Z"] = 0
+		}
 	end
 
 	-- StarterGui.UI.Main.List.Hitbox
@@ -437,14 +453,6 @@ local function addHitboxItem(name : string)
 	Z.Position = UDim2.new(0.9246, 0, 0.475, 0)
 	Z.BorderColor3 = Color3.fromRGB(0, 0, 0)
 	Z.Text = (config[name].Z or "")
-
-	if (config[name] == {}) then
-		config[name] = {
-			["X"] = 0,
-			["Y"] = 0,
-			["Z"] = 0
-		}
-	end
 
 	handleTextbox(name, X)
 	handleTextbox(name, Y)
