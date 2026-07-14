@@ -16,6 +16,14 @@ if (isStudio) then
 		return
 	end
 
+	makefolder = function(...)
+		return
+	end
+
+	isfolder = function(...)
+		return
+	end
+
 	hookmetamethod = function(...)
 		return
 	end
@@ -44,8 +52,15 @@ local lightingDetailsUpdater : RemoteEvent = ReplicatedStorage:WaitForChild("Lig
 local hitboxModule = require(sharedModules.Hitbox)
 local hitboxConfig = require(sharedModules.Hitbox.Config)
 
+local github = "https://raw.githubusercontent.com/Marcel46509/Scripts/refs/heads/main/keta/"
+
 local config = {}
 local garbage = {}
+
+local currentFrame = 1
+local maxFrames = 0
+
+local frames = {}
 
 local function addGarbage(item) --> Ultra pro garbage handler lol
 	table.insert(garbage, item)
@@ -66,15 +81,23 @@ local function clearGarbage()
 end
 
 local function loadConfig()
-	if (isfile("ketamine.slut.cfg")) then
+	if (not isfolder("ketamine")) then
+		makefolder("ketamine")
+	end
+
+	if (not isfolder("ketamine/frames")) then
+		makefolder("ketamine/frames")
+	end
+
+	if (isfile("ketamine/config.cfg")) then
 		xpcall(function()
-			for name : string, value : any in HttpService:JSONDecode(readfile("ketamine.slut.cfg")) do
+			for name : string, value : any in HttpService:JSONDecode(readfile("ketamine/config.cfg")) do
 				if (config[name] ~= nil) then
 					config[name] = value
 				end
 			end
 		end, function(message : string)
-			delfile("ketamine.slut.cfg")
+			delfile("ketamine/config.cfg")
 
 			warn(message)
 		end)
@@ -82,10 +105,8 @@ local function loadConfig()
 end
 
 local function saveConfig()
-	writefile("ketamine.slut.cfg", HttpService:JSONEncode(config))
+	writefile("ketamine/config.cfg", HttpService:JSONEncode(config))
 end
-
-loadConfig()
 
 if (not isStudio) then
 	if (not writefile) then
@@ -105,7 +126,23 @@ if (not isStudio) then
 		return
 	end
 
-	writefile("boykisser.png", game:HttpGet("https://raw.githubusercontent.com/Marcel46509/Scripts/refs/heads/main/keta/boykisserreal.png"))
+	writefile("ketamine/boykisser.png", game:HttpGet(github.. "boykisserreal.png"))
+end
+
+loadConfig()
+
+for i = 0, 52 do
+	local name = string.format("frame_%02d_delay-0.02s.png", i)
+
+	local fileName = ("ketamine/frames/".. name)
+
+	if (not isfile(fileName)) then
+		writefile(fileName, game:HttpGet(github.. "keyframes/".. name))
+	end
+
+    frames[i + 1] = getcustomasset(fileName)
+
+	maxFrames += 1
 end
 
 _G.CustomHitboxes = {}
@@ -226,7 +263,7 @@ local Logo = Instance.new("ImageLabel", Top)
 Logo.BorderSizePixel = 0
 Logo.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 Logo.AnchorPoint = Vector2.new(0, 0.5)
-Logo.Image = getcustomasset("boykisser.png")
+Logo.Image = getcustomasset("ketamine/boykisser.png")
 Logo.Size = UDim2.new(0, 25, 0, 25)
 Logo.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Logo.BackgroundTransparency = 1
@@ -527,3 +564,29 @@ end
 if (_G.DebugPrints) then
 	print("[✅] Loaded!")
 end
+
+task.defer(function()
+	while true do
+		if (UI.Parent == nil) then
+			break
+		end
+
+		if (not Main.Visible) then
+			task.wait(0.2)
+		end
+
+		local newFrameName = frames[currentFrame + 1]
+
+		if (newFrameName) then
+			currentFrame += 1
+
+			Logo.Image = newFrameName
+
+			if (currentFrame >= maxFrames) then
+				currentFrame = 0
+			end
+		end
+
+		task.wait(0.09)
+	end
+end)
