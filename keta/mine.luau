@@ -268,7 +268,9 @@ local function handleTextbox(name : string, textBox : TextBox)
 end
 
 local function addHitboxItem(name : string)
-	config[name] = {}
+	if (not config[name]) then
+		config[name] = {}
+	end
 
 	-- StarterGui.UI.Main.List.Hitbox
 	local Hitbox = addGarbage(Instance.new("Frame", List))
