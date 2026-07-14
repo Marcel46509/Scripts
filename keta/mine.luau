@@ -94,9 +94,7 @@ local function loadConfig()
 	if (isfile("ketamine/config.cfg")) then
 		xpcall(function()
 			for name : string, value : any in HttpService:JSONDecode(readfile("ketamine/config.cfg")) do
-				if (config[name] ~= nil) then
-					config[name] = value
-				end
+				config[name] = value
 			end
 		end, function(message : string)
 			delfile("ketamine/config.cfg")
