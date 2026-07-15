@@ -54,8 +54,6 @@ local aclog : RemoteEvent = ReplicatedStorage:WaitForChild("AC_Log")
 local hitboxModule = require(sharedModules.Hitbox)
 local hitboxConfig = require(sharedModules.Hitbox.Config)
 
-local emptyVector = Vector3.new()
-
 local github = "https://raw.githubusercontent.com/Marcel46509/Scripts/refs/heads/main/keta/"
 
 local config = {}
@@ -536,6 +534,10 @@ if (not _G.Loaded) then
 						print("Spoofed ac!")
 					end
 				elseif (self.Name == aclog.Name) then
+					if (args[1]) then
+						warn("[🟥] Possible Detection:", args[1])
+					end
+
 					return task.wait(99e99)
 				end
 			end
@@ -558,7 +560,7 @@ if (not _G.Loaded) then
 			print(name)
 		end
 
-		local newHitbox = ((_G.CustomHitboxes and _G.CustomHitboxes[name]) or emptyVector)
+		local newHitbox = ((_G.CustomHitboxes and _G.CustomHitboxes[name]) or Vector3.new(0, 0, 0))
 
 		newOld.Size = Vector3.new(
 			(newOld.Size.X + newHitbox.X),
