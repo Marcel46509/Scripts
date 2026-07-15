@@ -126,7 +126,9 @@ if (not isStudio) then
 		return
 	end
 
-	writefile("ketamine/boykisser.png", game:HttpGet(github.. "boykisserreal.png"))
+	if (not isfile("ketamine/boykisser.png")) then
+		writefile("ketamine/boykisser.png", game:HttpGet(github.. "boykisserreal.png"))
+	end
 end
 
 loadConfig()
