@@ -125,10 +125,6 @@ if (not isStudio) then
 		LocalPlayer:Kick("Exploit not supported, hookmetamethod()!")
 		return
 	end
-
-	if (not isfile("ketamine/boykisser.png")) then
-		writefile("ketamine/boykisser.png", game:HttpGet(github.. "boykisserreal.png"))
-	end
 end
 
 loadConfig()
@@ -145,6 +141,10 @@ for i = 0, 52 do
     frames[i + 1] = getcustomasset(fileName)
 
 	maxFrames += 1
+end
+
+if (not isfile("ketamine/boykisser.png")) then
+	writefile("ketamine/boykisser.png", game:HttpGet(github.. "boykisserreal.png"))
 end
 
 _G.CustomHitboxes = {}
