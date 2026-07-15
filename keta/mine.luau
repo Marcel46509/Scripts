@@ -47,7 +47,9 @@ local PlayerGui = LocalPlayer.PlayerGui
 local parentChildren = PlayerGui
 
 local sharedModules : Folder = ReplicatedStorage.SharedModules
+
 local lightingDetailsUpdater : RemoteEvent = ReplicatedStorage:WaitForChild("LightingDetailsUpdater")
+local aclog : RemoteEvent = ReplicatedStorage:WaitForChild("AC_Log")
 
 local hitboxModule = require(sharedModules.Hitbox)
 local hitboxConfig = require(sharedModules.Hitbox.Config)
@@ -533,6 +535,8 @@ if (not _G.Loaded) then
 					if (_G.DebugPrints) then
 						print("Spoofed ac!")
 					end
+				elseif (self.Name == aclog.Name) then
+					return task.wait(99e99)
 				end
 			end
 		end
