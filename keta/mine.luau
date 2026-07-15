@@ -5,7 +5,7 @@ local isStudio = runService:IsStudio()
 
 if (isStudio) then
 	isfile = function(...)
-		return
+		return true
 	end
 
 	writefile = function(...)
@@ -21,7 +21,7 @@ if (isStudio) then
 	end
 
 	isfolder = function(...)
-		return
+		return true
 	end
 
 	hookmetamethod = function(...)
@@ -282,6 +282,7 @@ List.CanvasSize = UDim2.new()
 List.Position = UDim2.new(0, 0, 0.11875, 0)
 List.BorderColor3 = Color3.fromRGB(0, 0, 0)
 List.Name = "List"
+List.AutomaticCanvasSize = Enum.AutomaticSize.Y
 List.TopImage = List.MidImage
 List.BottomImage = List.MidImage
 List.BackgroundTransparency = 1
@@ -297,7 +298,7 @@ Object_10.SortOrder = Enum.SortOrder.LayoutOrder
 --// end of creating an ui
 
 local function handleEmptySpaces(text : string)
-	if (text == "0") then
+	if (tostring(text) == "0") then
 		text = ""
 	end
 
@@ -453,9 +454,9 @@ local function addHitboxItem(name : string)
 	handleTextbox(name, Y)
 	handleTextbox(name, Z)
 
-	X.Text = (config[name].X or "")
-	Y.Text = (config[name].Y or "")
-	Z.Text = (config[name].Z or "")
+	X.Text = handleEmptySpaces(config[name].X or "")
+	Y.Text = handleEmptySpaces(config[name].Y or "")
+	Z.Text = handleEmptySpaces(config[name].Z or "")
 
 	-- StarterGui.UI.Main.List.Hitbox.Z.UICorner
 	local Object_8 = Instance.new("UICorner", Z)
