@@ -270,7 +270,7 @@ Logo.Size = UDim2.new(0, 25, 0, 25)
 Logo.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Logo.BackgroundTransparency = 1
 Logo.Name = "Logo"
-Logo.Position = UDim2.new(0.2863, 0, 0.5, 0)
+Logo.Position = UDim2.new(0.2763, 0, 0.5, 0)
 
 
 -- StarterGui.UI.Main.List
