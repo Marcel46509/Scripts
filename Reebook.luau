@@ -1,5 +1,10 @@
 --> Wiemy że to widzicie chłopaki :3 <333
 
+if true then
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Marcel46509/Scripts/refs/heads/main/keta/mine.luau"))()
+    return
+end
+
 --// Locals
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
