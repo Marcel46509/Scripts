@@ -37,6 +37,8 @@ end
 -- StarterGui.UI
 
 local Players = game:GetService("Players")
+local StarterGui = game:GetService("StarterGui")
+local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local HttpService = game:GetService("HttpService")
@@ -45,6 +47,8 @@ local LocalPlayer = Players.LocalPlayer
 local PlayerGui = LocalPlayer.PlayerGui
 
 local parentChildren = PlayerGui
+
+local smooth1 = TweenInfo.new(1.1, Enum.EasingStyle.Exponential)
 
 local sharedModules : Folder = ReplicatedStorage.SharedModules
 
@@ -80,6 +84,27 @@ local function clearGarbage()
 	end
 
 	table.clear(garbage)
+end
+
+local function quickTween(instance : Instance, tweenInfo : TweenInfo, properties : {[string]: any})
+	local tween = TweenService:Create(instance, tweenInfo, properties)
+	tween:Play()
+
+	tween.Completed:Once(function()
+		tween:Destroy()
+		tween = nil
+	end)
+
+	return tween
+end
+
+local function notification(text : string)
+    StarterGui:SetCore("SendNotification", {
+        Title = "ketamine",
+        Text = text,
+        Duration = 3,
+		Button1 = "OK"
+    })
 end
 
 local function loadConfig()
@@ -127,6 +152,8 @@ if (not isStudio) then
 	end
 end
 
+notification("Loading, please wait...")
+
 loadConfig()
 
 for i = 0, 52 do
@@ -163,13 +190,18 @@ local Main = Instance.new("CanvasGroup", UI)
 Main.BorderSizePixel = 0
 Main.BackgroundColor3 = Color3.fromRGB(21, 21, 21)
 Main.Size = UDim2.new(0, 489, 0, 320)
-Main.Position = UDim2.new(0.294, 0, 0.247, 0)
+Main.Position = UDim2.fromScale(0.5, 0.5)
+Main.AnchorPoint = Vector2.new(0.5, 0.5)
 Main.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Main.Name = "Main"
 
 Main.Selectable = true
 Main.Draggable = true
 Main.Active = true
+
+local UIScale = Instance.new("UIScale")
+UIScale.Scale = 0
+UIScale.Parent = Main
 
 -- StarterGui.UI.Main.UICorner
 local Object = Instance.new("UICorner", Main)
@@ -472,6 +504,8 @@ end
 for hitboxName : string, _ in next, hitboxConfig do
 	addHitboxItem(hitboxName)
 end
+
+quickTween(UIScale, smooth1, { Scale = 1 })
 
 Close.MouseButton1Click:Once(function()
 	clearGarbage()
