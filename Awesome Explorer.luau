@@ -1,5 +1,9 @@
+-- // BETA 6.3.0
+
 local EmbeddedModules = {
+
 ["Explorer"] = function()
+
 --[[
 	Explorer App Module
 	
