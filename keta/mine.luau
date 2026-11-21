@@ -546,7 +546,7 @@ if (not _G.Loaded) then
 
 	--// Spoof woof
 
-	local oldNamecall; oldNamecall = hookmetamethod(game, "__namecall", function(self, ...)
+	local oldNamecall; oldNamecall = hookmetamethod(game, "__namecall", newcclosure(function(self, ...)
 		local method = getnamecallmethod()
 		local callingscript = getcallingscript()
 
@@ -560,8 +560,14 @@ if (not _G.Loaded) then
 					local reports = args[2]
 
 					if (reports and (reports ~= {})) then
-						for _, reportData in next, reports do
-							warn("[🟥] Possible Detection:", (reportData.Category or reportData[1]), (reportData.Description or reportData[2]))
+						if (typeof(reports) == "table") then
+							for _, reportData in next, reports do
+								warn("[🟥] Possible Detection:", (reportData.Category or reportData[1]), (reportData.Description or reportData[2]))
+							end
+						elseif (typeof(reports) == "string") then
+							warn("[🟥] Possible Detection:", reports)
+
+							return task.wait(99e99)
 						end
 					end
 
@@ -591,9 +597,9 @@ if (not _G.Loaded) then
 		end
 
 		return oldNamecall(self, unpack(args))
-	end)
+	end))
 
-	--// Yeye hitbox settin'
+	--// Yeye hitbox settin' :3
 
 	local mt = getrawmetatable(hitboxModule)
 	local oldIndex = mt.__index
@@ -643,7 +649,7 @@ if (not _G.Loaded) then
 
 	setreadonly(mt, true)
 
-	--[[
+	--[[ old method
 
 	local oldFunc = hitboxModule.new
 
