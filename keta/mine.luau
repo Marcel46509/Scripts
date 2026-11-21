@@ -31,6 +31,18 @@ if (isStudio) then
 	getcustomasset = function(...)
 		return "rbxassetid://18820535797"
 	end
+
+	newcclosure = function(...)
+		return
+	end
+
+	getrawmetatable = function(...)
+		return {}
+	end
+
+	setreadonly = function(...)
+		return
+	end
 end
 
 -- Instances: 24 | Scripts: 0 | Modules: 0 | Tags: 0
@@ -56,7 +68,6 @@ local lightingDetailsUpdater : RemoteEvent = ReplicatedStorage:WaitForChild("Lig
 local hitboxModule = require(sharedModules.Hitbox)
 local hitboxConfig = require(sharedModules.Hitbox.Config)
 
-local hitboxMetatable = getrawmetatable(hitboxModule)
 local configMetatable = getrawmetatable(hitboxConfig)
 
 local github = "https://raw.githubusercontent.com/Marcel46509/Scripts/refs/heads/main/keta/"
