@@ -162,6 +162,21 @@ if (not isStudio) then
 		LocalPlayer:Kick("Exploit not supported, hookmetamethod()!")
 		return
 	end
+
+	if (not newcclosure) then
+		LocalPlayer:Kick("Exploit not supported, newcclosure()!")
+		return
+	end
+
+	if (not getrawmetatable) then
+		LocalPlayer:Kick("Exploit not supported, getrawmetatable()!")
+		return
+	end
+
+	if (not setreadonly) then
+		LocalPlayer:Kick("Exploit not supported, setreadonly()!")
+		return
+	end
 end
 
 notification("Loading, please wait...")
