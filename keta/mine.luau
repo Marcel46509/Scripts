@@ -56,6 +56,9 @@ local lightingDetailsUpdater : RemoteEvent = ReplicatedStorage:WaitForChild("Lig
 local hitboxModule = require(sharedModules.Hitbox)
 local hitboxConfig = require(sharedModules.Hitbox.Config)
 
+local hitboxMetatable = getrawmetatable(hitboxModule)
+local configMetatable = getrawmetatable(hitboxConfig)
+
 local github = "https://raw.githubusercontent.com/Marcel46509/Scripts/refs/heads/main/keta/"
 
 local config = {}
@@ -499,7 +502,7 @@ local function addHitboxItem(name : string)
 	Object_9.PaddingBottom = UDim.new(0.85, 0)
 end
 
-for hitboxName : string, _ in next, hitboxConfig do
+for hitboxName : string, _ in next, configMetatable.__index do
 	addHitboxItem(hitboxName)
 end
 
@@ -547,7 +550,7 @@ if (not _G.Loaded) then
 
 					if (reports and (reports ~= {})) then
 						for _, reportData in next, reports do
-							warn("[🟥] Possible Detection:", reportData.Category, reportData.Description)
+							warn("[🟥] Possible Detection:", (reportData.Category or reportData[1]), (reportData.Description or reportData[2]))
 						end
 					end
 
@@ -581,6 +584,56 @@ if (not _G.Loaded) then
 
 	--// Yeye hitbox settin'
 
+	local mt = getrawmetatable(hitboxModule)
+	local oldIndex = mt.__index
+
+	setreadonly(mt, false)
+
+	mt.__index = newcclosure(function(self, idx, ...)
+		local value
+
+		if (type(oldIndex) == "function") then
+			value = oldIndex(self, idx, ...)
+		else
+			value = oldIndex[idx]
+		end
+
+		if (idx == "new") then
+			local oldFunc = value
+
+			return newcclosure(function(...)
+				local newOld = oldFunc(...)
+
+				local args = {...}
+				local name = args[2]
+
+				if (_G.DebugPrints) then
+					print(name)
+				end
+
+				local newHitbox = (_G.CustomHitboxes and _G.CustomHitboxes[name]) or Vector3.new(0, 0, 0)
+
+				newOld.Size = Vector3.new(
+					newOld.Size.X + newHitbox.X,
+					newOld.Size.Y + newHitbox.Y,
+					newOld.Size.Z + newHitbox.X
+				)
+
+				if (_G.DebugPrints) then
+					print(newOld.Size.X, newOld.Size.Y, newOld.Size.Z)
+				end
+
+				return newOld
+			end)
+		end
+
+		return value
+	end)
+
+	setreadonly(mt, true)
+
+	--[[
+
 	local oldFunc = hitboxModule.new
 
 	hitboxModule.new = function(...)
@@ -607,6 +660,8 @@ if (not _G.Loaded) then
 
 		return newOld
 	end
+
+	--]]
 end
 
 if (_G.DebugPrints) then
