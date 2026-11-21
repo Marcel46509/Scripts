@@ -51,9 +51,7 @@ local parentChildren = PlayerGui
 local smooth1 = TweenInfo.new(1.1, Enum.EasingStyle.Exponential)
 
 local sharedModules : Folder = ReplicatedStorage.SharedModules
-
 local lightingDetailsUpdater : RemoteEvent = ReplicatedStorage:WaitForChild("LightingDetailsUpdater")
-local aclog : RemoteEvent = ReplicatedStorage:WaitForChild("AC_Log")
 
 local hitboxModule = require(sharedModules.Hitbox)
 local hitboxConfig = require(sharedModules.Hitbox.Config)
@@ -568,7 +566,7 @@ if (not _G.Loaded) then
 					if (_G.DebugPrints) then
 						print("Spoofed ac!")
 					end
-				elseif (self.Name == aclog.Name) then
+				elseif (self.Name == "AC_Log") then
 					if (args[1]) then
 						warn("[🟥] Possible Detection:", args[1])
 					end
